@@ -25,23 +25,30 @@ public class MemberController {
         return "Hello World";
     }
 
+    //회원 전체조회
     @GetMapping("/readAll")
     public ResponseEntity<Message<List<MemberResponseDto>>> readAll() {
         return memberService.readAll();
     }
 
+    //회원 단일조회
     @GetMapping("/{id}")
     public ResponseEntity<Message<MemberResponseDto>> findById(@PathVariable Long id) {
         return memberService.readOne(id);
     }
 
+    //회원가입
     @PostMapping("/signUp")
     public ResponseEntity<Message<MemberResponseDto>> create(@Valid @RequestBody MemberRequestDto requestDto) {
         return memberService.signUp(requestDto);
     }
+    //로그인
     @PostMapping("/signIn")
     public ResponseEntity<Message<MemberResponseDto>> signIn(@Valid @RequestBody SignInRequestDto requestDto) {
         return memberService.signIn(requestDto);
-
+    }
+    @DeleteMapping("/logOut")
+    public ResponseEntity<Message<String>> logOut() {
+        return null;
     }
 }
