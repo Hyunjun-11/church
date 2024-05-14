@@ -26,9 +26,13 @@ public class MemberController {
     }
 
     //회원 전체조회
-    @GetMapping("/readAll")
-    public ResponseEntity<Message<List<MemberResponseDto>>> readAll() {
-        return memberService.readAll();
+//    @GetMapping("/readAll")
+//    public ResponseEntity<Message<List<MemberResponseDto>>> readAll() {
+//        return memberService.readAll();
+//    }
+    @GetMapping("/readAAll")
+    public String readAll() {
+        return "전체조회";
     }
 
     //회원 단일조회
