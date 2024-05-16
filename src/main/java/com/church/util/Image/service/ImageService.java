@@ -22,12 +22,7 @@ public class ImageService {
         MultipartFile imgFile = requestDto.getImage();
         String imgName = imgFile.getOriginalFilename();
 
-        String file;
-        try {
-            file = s3Uploader.upload(imageFile);
-        } catch (IOException e) {
-            throw new CustomException(ErrorCode.FILE_CONVERT_FAIL);
-        }
+
         return null;
     }
 
