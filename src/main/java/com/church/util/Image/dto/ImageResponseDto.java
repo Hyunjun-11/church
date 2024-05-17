@@ -13,7 +13,7 @@ public class ImageResponseDto {
 
 
     public ImageResponseDto(Image image) {
-        this.imageName= image.getFileName();
+        this.imageName= image.getImageName();
         this.boardType=image.getBoardType();
     }
 }
