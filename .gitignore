@@ -37,7 +37,7 @@ out/
 .vscode/
 
 # GCP 서비스 계정 키 파일
-src/main/resources/church-demo-423522-0de8c375a4cd.json
+church-demo-423522-0de8c375a4cd.json
 
 # application.properties
-src/main/resources/application.properties
+application.properties
