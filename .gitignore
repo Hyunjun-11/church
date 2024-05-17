@@ -35,3 +35,9 @@ out/
 
 ### VS Code ###
 .vscode/
+
+# GCP 서비스 계정 키 파일
+church-demo-423522-0de8c375a4cd.json
+
+# application.properties
+application.properties

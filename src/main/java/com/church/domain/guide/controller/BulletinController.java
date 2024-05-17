@@ -32,7 +32,9 @@ public class BulletinController {
     }
 
     @PostMapping(value = "/image",consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<Message<ResponseDto>> uploadImage(@ModelAttribute BulletinRequestDto requestDto){}
+    public ResponseEntity<Message<ResponseDto>> uploadImage(@ModelAttribute BulletinRequestDto requestDto){
+        return null;
+    }
 
 
 }
