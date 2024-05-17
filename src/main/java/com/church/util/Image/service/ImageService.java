@@ -1,6 +1,5 @@
 package com.church.util.Image.service;
 
-import com.church.domain.guide.dto.ResponseDto;
 import com.church.util.Image.dto.ImageRequestDto;
 import com.church.util.Image.dto.ImageResponseDto;
 import com.church.util.Image.entity.Image;
@@ -8,7 +7,6 @@ import com.church.util.Image.repository.ImageRepository;
 import com.church.util.gcs.GcsBucketUpload;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
