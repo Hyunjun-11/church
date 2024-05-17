@@ -1,5 +1,6 @@
 package com.church.util.Image.dto;
 
+import com.church.util.Image.entity.BoardType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,10 +13,11 @@ import org.springframework.web.multipart.MultipartFile;
 @NoArgsConstructor
 public class ImageRequestDto  {
 
-    private String imageUrl;
 
     private String imageName;
 
     private MultipartFile image;
+
+    private BoardType boardType;
 
 }

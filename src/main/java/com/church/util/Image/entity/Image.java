@@ -1,14 +1,19 @@
 package com.church.util.Image.entity;
 
 
+import com.church.util.Timestamped;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
 @NoArgsConstructor
-public class Image {
+@AllArgsConstructor
+@Builder
+public class Image extends Timestamped {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,12 +23,9 @@ public class Image {
     private String url;
 
     @Column(nullable = false)
-    private String fileName;
+    private String imageName;
 
-    @Column(nullable=false)
-    private String filePath;
-
-    private BoardType type;
+    private BoardType boardType;
 
 
 }
