@@ -18,6 +18,6 @@ public class ImageRequestDto  {
 
     private MultipartFile image;
 
-    private BoardType boardType;
+//    private BoardType boardType;
 
 }

@@ -1,18 +1,13 @@
-package com.church.domain.guide.controller;
+package com.church.domain.user.worship.bulletin.controller;
 
-
-import com.church.domain.guide.dto.BulletinRequestDto;
-import com.church.domain.guide.dto.ResponseDto;
-import com.church.domain.guide.entity.Bulletin;
-import com.church.domain.guide.service.BulletinService;
+import com.church.domain.user.worship.bulletin.dto.BulletinRequestDto;
+import com.church.domain.user.worship.bulletin.dto.ResponseDto;
+import com.church.domain.user.worship.bulletin.service.BulletinService;
 import com.church.util.message.Message;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-
-import javax.print.attribute.standard.Media;
 
 @RestController
 @RequiredArgsConstructor
@@ -22,8 +17,8 @@ public class BulletinController {
     private final BulletinService bulletinService;
 
     @GetMapping("/")
-    public ResponseEntity<Message<ResponseDto>> readAll(){
-        return bulletinService.readAll();
+    public ResponseEntity<Message<ResponseDto>> readOne(){
+        return bulletinService.readOne();
     }
     //주보 게시판 등록
     @PostMapping("/create")

@@ -1,4 +1,4 @@
-package com.church.domain.guide.dto;
+package com.church.domain.user.worship.bulletin.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

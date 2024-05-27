@@ -1,11 +1,11 @@
-package com.church.domain.guide.entity;
+package com.church.domain.user.worship.bulletin.entity;
 
 
+import com.church.util.Image.entity.BoardType;
 import com.church.util.Image.entity.Image;
 import com.church.util.Timestamped;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -27,8 +27,10 @@ public class Bulletin extends Timestamped {
     @Column(nullable = false)
     private String content;
 
+    @Column(nullable = false)
+    private BoardType boardType;
+
     @Column
-    @OneToMany
-    private List<Image> uploadImg;
+    private String imageUrl;
 
 }
