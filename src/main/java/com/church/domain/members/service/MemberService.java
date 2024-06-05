@@ -10,6 +10,7 @@ import com.church.util.message.Message;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -23,6 +24,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class MemberService {
 
     private final MemberRepository memberRepository;
@@ -53,6 +55,8 @@ public class MemberService {
     //회원가입
     @Transactional
     public ResponseEntity<Message<MemberResponseDto>> signUp(MemberRequestDto memberRequestDto) {
+        System.out.println("회원가입");
+
         String memberId = memberRequestDto.getMemberId();
 
         Optional<Member> duplicateMember = findByMemberId(memberId);

@@ -36,6 +36,7 @@ public class MemberController {
     }
     @GetMapping("/test")
     public String test2() {
+        System.out.println("테스트");
         return "테스트다";
     }
 
