@@ -41,7 +41,15 @@ dependencies {
     implementation 'org.springframework.cloud:spring-cloud-gcp-storage:1.2.5.RELEASE'
 }
 
-
 tasks.named('test') {
     useJUnitPlatform()
+}
+
+// 중복 파일 처리 전략 추가
+bootJar {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
+tasks.withType(JavaCompile) {
+    options.compilerArgs += ["-Xlint:deprecation", "-Xlint:unchecked"]
 }
