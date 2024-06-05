@@ -34,6 +34,10 @@ public class MemberController {
     public String readAll() {
         return "전체조회";
     }
+    @GetMapping("/test")
+    public String test2() {
+        return "테스트다";
+    }
 
     //회원 단일조회
     @GetMapping("/{id}")
