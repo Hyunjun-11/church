@@ -37,11 +37,11 @@ public class CustomSecurityConfig {
                 .httpBasic(HttpBasicConfigurer::disable)
 
                 .authorizeHttpRequests(auth->auth
-                .requestMatchers(PathRequest.toH2Console()).permitAll()
+//                .requestMatchers(PathRequest.toH2Console()).permitAll()
 
                 .anyRequest().permitAll()
         );
-        http.headers(headers ->headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin));
+//        http.headers(headers ->headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin));
         return http.build();
     }
 
