@@ -97,8 +97,7 @@ public class MemberService {
                 .password(passwordEncoder.encode(requestDTO.getPassword()))
                 .name(requestDTO.getName())
                 .email(requestDTO.getEmail())
-                .church(requestDTO.getChurch())
-                .phoneNumber(requestDTO.getPhoneNumber())
+                .birth(requestDTO.getBirth())
                 .build();
     }
 

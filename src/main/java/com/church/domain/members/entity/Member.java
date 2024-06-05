@@ -28,15 +28,12 @@ public class Member {
     private String name;
 
     @Column
-    private String church;
-
-    @Column
     private String position;
 
     @Column
-    private String email;
+    private String birth;
     @Column
-    private String phoneNumber;
+    private String email;
 
 
 

@@ -12,6 +12,8 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class MemberRequestDto {
+    private String name;
+
     @NotEmpty(message = "아이디를 입력해주세요")
     private String memberId;
 
@@ -19,9 +21,7 @@ public class MemberRequestDto {
     @Pattern(regexp = "^(?=.*[a-z])(?=.*\\d)[a-z\\d!@#$%^&*()_-]{5,12}$", message = "비밀번호는 5~12자 이내 영어(소문자),숫자,특수기호(선택) 범위에서 입력해야합니다.")
     private String password;
 
-    private String name;
-
-    private String church;
+    private String birth;
 
     private String position;
 
@@ -29,7 +29,7 @@ public class MemberRequestDto {
     @Pattern(regexp = "^[_a-z0-9-]+(.[_a-z0-9-]+)*@(?:\\w+\\.)+\\w+$", message = "올바른 형식의 이메일을 입력해주세요.")
     private String email;
 
-    private String phoneNumber;
+
 
 
 }

@@ -19,9 +19,8 @@ public class ImageController {
 
     private final ImageService imageService;
     //이미지 업로드
-    @PostMapping(value = "/image",consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    @PostMapping(value = "/image", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE}, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ImageResponseDto> image(@ModelAttribute ImageRequestDto requestDto) throws IOException {
-
         return imageService.upload(requestDto);
     }
 }
