@@ -2,9 +2,9 @@ name: Java CI/CD with Gradle
 
 on:
   push:
-    branches: ["main"]
+    branches: [ "main" ]
   pull_request:
-    branches: ["main"]
+    branches: [ "main" ]
 
 jobs:
   build-and-deploy:
@@ -61,11 +61,20 @@ jobs:
       - name: Restart application on VM
         run: |
           ssh -o StrictHostKeyChecking=no -i ~/.ssh/gcp_key mical0108@34.47.76.182 << 'EOF'
+          echo "Stopping existing application..."
           pkill -f 'java -jar church-0.0.1-SNAPSHOT.jar' || true
           sleep 5
           if pgrep -f 'java -jar church-0.0.1-SNAPSHOT.jar'; then
-            echo "Existing process still running, killing forcefully"
+            echo "Existing process still running, killing forcefully..."
             pkill -9 -f 'java -jar church-0.0.1-SNAPSHOT.jar'
           fi
+          sleep 5
+          if ! pgrep -f 'java -jar church-0.0.1-SNAPSHOT.jar'; then
+            echo "Existing process terminated successfully."
+          else
+            echo "Failed to terminate existing process. Exiting..."
+            exit 1
+          fi
+          echo "Starting new application..."
           nohup java -jar /home/mical0108/church-0.0.1-SNAPSHOT.jar > /home/mical0108/nohup.out 2>&1 &
           EOF
