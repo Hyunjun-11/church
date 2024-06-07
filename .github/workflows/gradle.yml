@@ -2,13 +2,12 @@ name: Java CI/CD with Gradle
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
 
 jobs:
   build-and-deploy:
-
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -63,5 +62,10 @@ jobs:
         run: |
           ssh -o StrictHostKeyChecking=no -i ~/.ssh/gcp_key mical0108@34.47.76.182 << 'EOF'
           pkill -f 'java -jar church-0.0.1-SNAPSHOT.jar' || true
+          sleep 5
+          if pgrep -f 'java -jar church-0.0.1-SNAPSHOT.jar'; then
+            echo "Existing process still running, killing forcefully"
+            pkill -9 -f 'java -jar church-0.0.1-SNAPSHOT.jar'
+          fi
           nohup java -jar /home/mical0108/church-0.0.1-SNAPSHOT.jar > /home/mical0108/nohup.out 2>&1 &
           EOF
