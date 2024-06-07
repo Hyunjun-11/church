@@ -62,16 +62,15 @@ jobs:
         run: |
           ssh -o StrictHostKeyChecking=no -i ~/.ssh/gcp_key mical0108@34.47.76.182 << 'EOF'
           echo "Stopping existing application..."
-          PID=$(pgrep -f 'java -jar church-0.0.1-SNAPSHOT.jar')
+          PID=$(sudo lsof -t -i:8080)
           if [ -n "$PID" ]; then
-            kill -9 $PID
+            echo "Killing process using port 8080: $PID"
+            sudo kill -9 $PID
             sleep 5
-            while pgrep -f 'java -jar church-0.0.1-SNAPSHOT.jar'; do
-              echo "Waiting for process to terminate..."
-              sleep 1
-            done
+            echo "Process $PID terminated."
+          else
+            echo "No process found using port 8080."
           fi
-          echo "Existing process terminated successfully."
           echo "Starting new application..."
           nohup java -jar /home/mical0108/church-0.0.1-SNAPSHOT.jar > /home/mical0108/nohup.out 2>&1 &
           EOF
