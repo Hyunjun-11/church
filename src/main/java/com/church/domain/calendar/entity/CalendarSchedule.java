@@ -10,11 +10,14 @@ public class CalendarSchedule {
     Long id;
 
     @Column(nullable = false)
-    String start;
-    @Column(nullable = false)
-    String end;
+    String startTime;
+
+    @Column( nullable = false)
+    String endTime;
+
     @Column(nullable = false)
     String title;
+
     @Column(nullable = false)
     String content;
 }
