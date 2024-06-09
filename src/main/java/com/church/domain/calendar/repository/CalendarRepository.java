@@ -1,9 +1,10 @@
 package com.church.domain.calendar.repository;
 
+import com.church.domain.calendar.entity.CalendarSchedule;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.Calendar;
 
-public interface CalendarRepository extends JpaRepository<Calendar, Long> {
+
+public interface CalendarRepository extends JpaRepository<CalendarSchedule, Long> {
 
 }
