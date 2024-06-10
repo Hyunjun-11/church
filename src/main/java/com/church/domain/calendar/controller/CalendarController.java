@@ -25,8 +25,8 @@ public class CalendarController {
         return calendarService.realAll();
     }
     @PostMapping("/")
-    public ResponseEntity<Message<CalendarResponseDto>> saveCalendar(@RequestBody CalendarRequestDto calendarRequestDto) {
-        return calendarService.saveCalendar(calendarRequestDto);
+    public ResponseEntity<Message<CalendarResponseDto>> create(@RequestBody CalendarRequestDto calendarRequestDto) {
+        return calendarService.create(calendarRequestDto);
     }
     @PutMapping("/{id}")
     public ResponseEntity<Message<CalendarResponseDto>> updateCalendar(@PathVariable Long id, @RequestBody CalendarRequestDto calendarRequestDto) {
