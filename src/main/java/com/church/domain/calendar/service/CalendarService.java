@@ -18,7 +18,7 @@ public class CalendarService {
 
     //일정추가
     @Transactional
-    public ResponseEntity<Message<CalendarResponseDto>> saveCalendar(CalendarRequestDto calendarRequestDto) {
+    public ResponseEntity<Message<CalendarResponseDto>> create(CalendarRequestDto calendarRequestDto) {
         return null;
     }
 
