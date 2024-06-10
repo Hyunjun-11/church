@@ -20,7 +20,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BoardService {
 
-    private BoardRepository boardRepository;
+    private final BoardRepository boardRepository;
 
     @Transactional
     public ResponseEntity<Message<List<BoardResponseDto>>> readAll() {
