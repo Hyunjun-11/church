@@ -19,6 +19,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 public class Timestamped {
+    //테스트
     @CreatedDate
     private LocalDateTime createAt;
 
