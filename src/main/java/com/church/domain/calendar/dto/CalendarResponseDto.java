@@ -1,6 +1,7 @@
 package com.church.domain.calendar.dto;
 
 
+import com.church.domain.calendar.entity.CalendarSchedule;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,12 +12,12 @@ public class CalendarResponseDto extends CalendarDto {
     private Long calendarId;
 
     // CalendarDto 객체와 id를 매개변수로 받는 생성자
-    public CalendarResponseDto(CalendarDto calendarDto, Long id) {
+    public CalendarResponseDto(CalendarSchedule calendarSchedule) {
         super(
-            calendarDto.getTitle(),
-            calendarDto.getContent(),
-            calendarDto.getStartTime(),
-            calendarDto.getEndTime());
-        this.calendarId = id;
+            calendarSchedule.getTitle(),
+            calendarSchedule.getContent(),
+            calendarSchedule.getStartTime(),
+            calendarSchedule.getEndTime());
+        this.calendarId = calendarSchedule.getId();
     }
 }

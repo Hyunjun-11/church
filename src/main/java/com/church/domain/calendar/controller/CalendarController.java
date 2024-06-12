@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/calendar")
 @RequiredArgsConstructor
@@ -21,8 +23,12 @@ public class CalendarController {
     }
 
     @GetMapping("/")
-    public ResponseEntity<Message<CalendarResponseDto>> realAll() {
+    public ResponseEntity<Message<List<CalendarResponseDto>>> realAll() {
         return calendarService.realAll();
+    }
+    @GetMapping("/{id}")
+    public ResponseEntity<Message<CalendarResponseDto>> readOne(@PathVariable Long id) {
+        return calendarService.readOne(id);
     }
     @PostMapping("/")
     public ResponseEntity<Message<CalendarResponseDto>> create(@RequestBody CalendarRequestDto calendarRequestDto) {
@@ -33,7 +39,7 @@ public class CalendarController {
         return calendarService.updateCalendar(id,calendarRequestDto);
     }
     @DeleteMapping("/{id}")
-    public ResponseEntity<Message<CalendarResponseDto>> deleteCalendar(@PathVariable Long id) {
+    public String deleteCalendar(@PathVariable Long id) {
         return calendarService.deleteCalendar(id);
 
     }

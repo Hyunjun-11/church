@@ -2,7 +2,6 @@ package com.church.domain.calendar.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -29,4 +28,11 @@ public class CalendarSchedule {
 
     @Column(nullable = false)
     String content;
+
+    public void update(CalendarSchedule schedule){
+        this.startTime = schedule.getStartTime();
+        this.endTime = schedule.getEndTime();
+        this.title = schedule.getTitle();
+        this.content = schedule.getContent();
+    }
 }
