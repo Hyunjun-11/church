@@ -47,6 +47,7 @@ public class CalendarService {
                 .content(calendarRequestDto.getContent())
                 .startTime(calendarRequestDto.getStartTime())
                 .endTime(calendarRequestDto.getEndTime())
+                .color(calendarRequestDto.getColor())
                 .build();
         calendarRepository.save(schedule);
         CalendarResponseDto responseDto=new CalendarResponseDto(schedule);

@@ -14,4 +14,7 @@ public class CalendarDto {
     private String content;
     private String startTime;
     private String endTime;
+    private String color;
+
+
 }

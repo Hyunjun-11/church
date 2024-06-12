@@ -30,10 +30,14 @@ public class CalendarSchedule {
     @Column(nullable = false)
     String content;
 
+    @Column(nullable = false)
+    String color;
+
     public void update(CalendarRequestDto schedule){
         this.startTime = schedule.getStartTime();
         this.endTime = schedule.getEndTime();
         this.title = schedule.getTitle();
         this.content = schedule.getContent();
+        this.color = schedule.getColor();
     }
 }

@@ -9,7 +9,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class CalendarResponseDto extends CalendarDto {
-    private Long calendarId;
+    private Long id;
 
     // CalendarDto 객체와 id를 매개변수로 받는 생성자
     public CalendarResponseDto(CalendarSchedule calendarSchedule) {
@@ -17,7 +17,10 @@ public class CalendarResponseDto extends CalendarDto {
             calendarSchedule.getTitle(),
             calendarSchedule.getContent(),
             calendarSchedule.getStartTime(),
-            calendarSchedule.getEndTime());
-        this.calendarId = calendarSchedule.getId();
+            calendarSchedule.getEndTime(),
+            calendarSchedule.getColor());
+
+
+        this.id = calendarSchedule.getId();
     }
 }
