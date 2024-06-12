@@ -58,7 +58,7 @@ public class CalendarService {
     @Transactional
     public ResponseEntity<Message<CalendarResponseDto>> updateCalendar(Long id, CalendarRequestDto calendarRequestDto) {
         CalendarSchedule schedule=findById(id);
-        schedule.update(schedule);
+        schedule.update(calendarRequestDto);
         CalendarResponseDto responseDto=new CalendarResponseDto(schedule);
 
         return new ResponseEntity<>(new Message<>("일정 수정 성공",responseDto),HttpStatus.OK);

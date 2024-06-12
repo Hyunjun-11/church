@@ -1,5 +1,6 @@
 package com.church.domain.calendar.entity;
 
+import com.church.domain.calendar.dto.CalendarRequestDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -29,7 +30,7 @@ public class CalendarSchedule {
     @Column(nullable = false)
     String content;
 
-    public void update(CalendarSchedule schedule){
+    public void update(CalendarRequestDto schedule){
         this.startTime = schedule.getStartTime();
         this.endTime = schedule.getEndTime();
         this.title = schedule.getTitle();
