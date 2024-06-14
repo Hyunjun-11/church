@@ -1,6 +1,6 @@
 package com.church.util.Image.entity;
 
-public enum BoardType {
+public enum ImageType {
 
     BULLETIN,
     DANIAL,

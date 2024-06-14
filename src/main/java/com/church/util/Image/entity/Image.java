@@ -4,7 +4,6 @@ package com.church.util.Image.entity;
 import com.church.util.Timestamped;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -26,7 +25,7 @@ public class Image extends Timestamped {
     @Column(nullable = false)
     private String imageName;
 
-    private BoardType boardType;
+    private ImageType type;
 
 
 }

@@ -20,13 +20,13 @@ public class BannerController {
     private final BannerService bannerService;
 
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Message<BannerResponseDto>> readOne(@PathVariable Long id) {
+    @GetMapping("/{categoryName}")
+    public ResponseEntity<Message<BannerResponseDto>> readOne(@PathVariable String categoryName) {
 
-        return bannerService.readOne(id);
+        return bannerService.readOne(categoryName);
     }
     @PostMapping(value = "/", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE}, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Message<BannerResponseDto>> create(@ModelAttribute BannerRequestDto bannerDto) {
+    public ResponseEntity<Message<BannerResponseDto>> create(@ModelAttribute BannerRequestDto bannerDto) throws IOException {
         return bannerService.create(bannerDto);
     }
 
