@@ -26,16 +26,19 @@ jobs:
       - name: Set up Google Cloud credentials
         run: echo "${{ secrets.GCP_CREDENTIALS }}" > $HOME/gcp_key.json
 
-      - name: Build with Gradle Wrapper
-        env:
-          GOOGLE_APPLICATION_CREDENTIALS: $HOME/gcp_key.json
-        run: ./gradlew build
-
       - name: Create resources folder
         run: mkdir -p ./src/main/resources/
 
       - name: Create application.properties
         run: echo "${{ secrets.APPLICATION_PROPERTIES }}" > ./src/main/resources/application.properties
+      - name: Create church-demo-json
+        run: echo "${{ secrets.BUCKET_JSON }}" > ./src/main/resources/church-demo-423522-0de8c375a4cd.json
+
+
+      - name: Build with Gradle Wrapper
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: $HOME/gcp_key.json
+        run: ./gradlew build
 
       - name: Build without tests
         run: ./gradlew build -x test
