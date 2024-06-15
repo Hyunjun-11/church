@@ -42,6 +42,12 @@ dependencies {
     // jdbc
     implementation 'org.springframework.boot:spring-boot-starter-jdbc:3.2.4'
     implementation 'mysql:mysql-connector-java:8.0.29'
+    //jwt
+    compileOnly group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.2'
+    runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.2'
+    runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.2'
+
+
 }
 
 tasks.named('test') {
