@@ -15,6 +15,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -27,6 +28,14 @@ import java.util.List;
 @EnableWebSecurity
 @EnableMethodSecurity(securedEnabled = true)
 public class CustomSecurityConfig {
+
+    private static final String[] CORS_URL={
+            "http://localhost:5173",
+            "https://tschurch.kr"
+
+    };
+
+
 
     private final JwtAuthFilter jwtAuthFilter;
 
@@ -44,20 +53,23 @@ public class CustomSecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .httpBasic(HttpBasicConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)
-//                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 //세션미사용
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
 
                 .authorizeHttpRequests(auth->auth
-//                    .requestMatchers(PathRequest.toH2Console()).permitAll()
-//                    .requestMatchers("/api/admin/").hasAnyRole("ADMIN")
-//                    .requestMatchers("/api/member/signIn").permitAll()
+                        //h2-console
+//                        .requestMatchers(PathRequest.toH2Console()).permitAll()
+//                        .requestMatchers("/api/admin/*").hasAnyRole("ADMIN")
+//                        .requestMatchers("/api/member/signIn").permitAll()
 
 
                 .anyRequest().permitAll()
         );
+
+        //h2-console
 //        http.headers(headers ->headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin));
         return http.build();
     }
@@ -67,10 +79,10 @@ public class CustomSecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("*"));
+        configuration.setAllowedOrigins(List.of(CORS_URL));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
         configuration.setAllowedHeaders(List.of("*"));
-        configuration.setAllowCredentials(false);
+        configuration.setAllowCredentials(true);
         configuration.setExposedHeaders(List.of("*"));
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
@@ -79,3 +91,4 @@ public class CustomSecurityConfig {
     }
 
 }
+

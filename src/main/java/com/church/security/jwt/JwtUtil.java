@@ -8,6 +8,7 @@ import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +18,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 
 import java.security.Key;
 import java.time.Duration;
@@ -32,7 +32,6 @@ public class JwtUtil {
     public static final String ACCESS_KEY = "ACCESS-TOKEN";
     private static final long ACCESS_TIME = Duration.ofMinutes(30).toMillis();
     private static final long REFRESH_TIME = Duration.ofDays(7).toMillis();
-
 
     private final UserDetailsServiceImpl userDetailsService;
 
@@ -53,11 +52,15 @@ public class JwtUtil {
         }
     }
 
-    public String resolveToken(HttpServletRequest request) {
 
-        String bearerToken = request.getHeader(ACCESS_KEY);
-        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(BEARER_PREFIX)) {
-            return bearerToken.substring(7);
+    public String resolveToken(HttpServletRequest request) {
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (JwtUtil.ACCESS_KEY.equals(cookie.getName())) {
+                    return cookie.getValue();
+                }
+            }
         }
         return null;
     }
@@ -68,37 +71,25 @@ public class JwtUtil {
 
     public String createToken(Members members) {
         Date date = new Date();
+        String token = Jwts.builder()
+                .setSubject(members.getMemberId())
+                .claim("memberID", members.getMemberId())
+                .claim("email", members.getEmail())
+                .claim("name", members.getName())
+                .claim("role", members.getRole())
+                .claim("birth", members.getBirth().toString())
+                .signWith(key)
+                .setIssuedAt(date)
+                .setExpiration(new Date(date.getTime() + ACCESS_TIME))
+                .compact();
 
-            return BEARER_PREFIX
-                    + Jwts.builder()
-                    .setSubject(members.getMemberId())
-                    .claim("memberID", members.getMemberId())
-                    .claim("email", members.getEmail())
-                    .claim("name", members.getName())
-                    .claim("role",members.getRole())
-                    .claim("birth", members.getBirth().toString())
-                    .signWith(key)
-                    .setIssuedAt(date)
-                    .setExpiration(new Date(date.getTime() + ACCESS_TIME))
-                    .compact();
-
+        return Base64.getUrlEncoder().encodeToString(token.getBytes());
     }
 
-//    public String createNewRefreshToken(String email, long time) {
-//        Date date = new Date();
-//        return BEARER_PREFIX +
-//                Jwts.builder()
-//                        .setSubject(email)
-//                        .setExpiration(new Date(date.getTime() + time))
-//                        .setIssuedAt(date)
-//                        .signWith(key)
-//                        .compact();
-//    }
-
     public boolean validateToken(String token) {
-
         try {
-            Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
+            String jwt = new String(Base64.getUrlDecoder().decode(token));
+            Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jwt);
             return true;
         } catch (SecurityException | MalformedJwtException e) {
             log.info("Invalid JWT signature, 유효하지 않은 JWT 서명 입니다.");
@@ -113,7 +104,8 @@ public class JwtUtil {
     }
 
     public String getMemberInfoFromToken(String token) {
-        return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody().getSubject();
+        String jwt = new String(Base64.getUrlDecoder().decode(token));
+        return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jwt).getBody().getSubject();
     }
 
     public Authentication createAuthentication(String memberId) {
@@ -121,14 +113,14 @@ public class JwtUtil {
         return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
     }
 
-
     public void setHeaderToken(HttpServletResponse response, String accessToken) {
         response.setHeader(ACCESS_KEY, accessToken);
     }
 
     public long getExpirationTime(String token) {
-        Date expirationDate = Jwts.parserBuilder().setSigningKey(secretKey).build()
-                .parseClaimsJws(token).getBody().getExpiration();
+        String jwt = new String(Base64.getUrlDecoder().decode(token));
+        Date expirationDate = Jwts.parserBuilder().setSigningKey(key).build()
+                .parseClaimsJws(jwt).getBody().getExpiration();
         Date now = new Date();
         return expirationDate.getTime() - now.getTime();
     }

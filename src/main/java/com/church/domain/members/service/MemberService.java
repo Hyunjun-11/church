@@ -6,11 +6,11 @@ import com.church.domain.members.dto.request.SignInRequestDto;
 import com.church.domain.members.dto.response.MemberResponseDto;
 import com.church.domain.members.entity.Members;
 import com.church.domain.members.repository.MemberRepository;
-import com.church.security.jwt.JwtTokenDto;
 import com.church.security.jwt.JwtUtil;
 import com.church.util.message.Message;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -79,20 +79,47 @@ public class MemberService {
 
 
     //로그인
+//    @Transactional
+//    public ResponseEntity<Message<MemberResponseDto>> signIn(SignInRequestDto requestDto, HttpServletResponse httpServletResponse) {
+//        String memberId = requestDto.getMemberId();
+//        Optional<Members> optionalMember = findByMemberId(memberId);
+//
+//        if(optionalMember.isEmpty() || !passwordEncoder.matches(requestDto.getPassword(),optionalMember.get().getPassword())) {
+//            throw new UsernameNotFoundException("회원 정보가 일치하지 않습니다.");
+//        }
+//        MemberResponseDto memberResponseDto = new MemberResponseDto(optionalMember.get());
+//
+//        JwtTokenDto tokenDto = jwtUtil.createAllToken(optionalMember.get());
+//       jwtUtil.setHeaderToken(httpServletResponse,tokenDto.getAccessToken());
+//        return new ResponseEntity<>(new Message<>("로그인 성공",memberResponseDto),HttpStatus.OK);
+//    }
+    //httpOnly
     @Transactional
-    public ResponseEntity<Message<MemberResponseDto>> signIn(SignInRequestDto requestDto, HttpServletResponse httpServletResponse) {
+    public ResponseEntity<Message<MemberResponseDto>> signIn( SignInRequestDto requestDto, HttpServletResponse httpServletResponse) {
         String memberId = requestDto.getMemberId();
-        Optional<Members> optionalMember = findByMemberId(memberId);
+        Optional<Members> optionalMember = memberRepository.findByMemberId(memberId);
 
-        if(optionalMember.isEmpty() || !passwordEncoder.matches(requestDto.getPassword(),optionalMember.get().getPassword())) {
+        if (optionalMember.isEmpty() || !passwordEncoder.matches(requestDto.getPassword(), optionalMember.get().getPassword())) {
             throw new UsernameNotFoundException("회원 정보가 일치하지 않습니다.");
         }
+
         MemberResponseDto memberResponseDto = new MemberResponseDto(optionalMember.get());
 
-        JwtTokenDto tokenDto = jwtUtil.createAllToken(optionalMember.get());
-       jwtUtil.setHeaderToken(httpServletResponse,tokenDto.getAccessToken());
-        return new ResponseEntity<>(new Message<>("로그인 성공",memberResponseDto),HttpStatus.OK);
+        // JWT 토큰 생성
+        String accessToken = jwtUtil.createToken(optionalMember.get());
+
+        // HttpOnly 쿠키 설정
+        Cookie accessTokenCookie = new Cookie("ACCESS-TOKEN", accessToken);
+        accessTokenCookie.setHttpOnly(true);
+        accessTokenCookie.setSecure(true); // HTTPS를 사용하는 경우 true로 설정
+        accessTokenCookie.setPath("/");
+        accessTokenCookie.setMaxAge(30 * 60); // 30분
+
+        httpServletResponse.addCookie(accessTokenCookie);
+
+        return new ResponseEntity<>(new Message<>("로그인 성공", memberResponseDto), HttpStatus.OK);
     }
+
 
     private Members findById(Long id){
         return memberRepository.findById(id).orElseThrow(()->new EntityNotFoundException("회원 정보를 찾을 수 없습니다."));

@@ -41,7 +41,7 @@ public class MemberController {
         return "테스트다";
     }
 
-    @GetMapping("/test2")
+    @GetMapping("/user")
     public String test3(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         System.out.println("userDetails"+userDetails.getMemberId());
         System.out.println("userDetails"+userDetails.getMember());
