@@ -5,6 +5,7 @@ import com.church.domain.members.dto.request.MemberRequestDto;
 import com.church.domain.members.dto.request.SignInRequestDto;
 import com.church.domain.members.dto.response.MemberResponseDto;
 import com.church.domain.members.entity.Members;
+import com.church.domain.members.entity.ROLE;
 import com.church.domain.members.repository.MemberRepository;
 import com.church.security.jwt.JwtUtil;
 import com.church.util.message.Message;
@@ -128,15 +129,19 @@ public class MemberService {
         return memberRepository.findByMemberId(memberId);
     }
     private Members createMember(MemberRequestDto requestDTO) {
-        System.out.println(requestDTO.toString());
+        ROLE role= ROLE.USER;
+        if(requestDTO.getRole()==ROLE.ADMIN){
+            role=ROLE.ADMIN;
+        }
         return Members.builder()
                 .memberId(requestDTO.getMemberId())
                 .password(passwordEncoder.encode(requestDTO.getPassword()))
                 .name(requestDTO.getName())
                 .email(requestDTO.getEmail())
                 .birth(requestDTO.getBirth())
-                .role(requestDTO.getRole())
+                .role(role)
                 .build();
+
     }
 
 }

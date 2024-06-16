@@ -41,14 +41,11 @@ public class JwtUtil {
 
     @PostConstruct
     public void init() {
-        log.info("Encoded secret key: {}", secretKey);
         try {
             byte[] bytes = Base64.getDecoder().decode(secretKey);
-            log.info("Decoded bytes: {}", bytes);
             key = Keys.hmacShaKeyFor(bytes);
-            log.info("Key successfully created");
         } catch (IllegalArgumentException e) {
-            log.error("Failed to decode Base64 encoded key: {}", e.getMessage());
+            log.error(e.getMessage());
         }
     }
 
