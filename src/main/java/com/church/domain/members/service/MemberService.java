@@ -129,10 +129,7 @@ public class MemberService {
         return memberRepository.findByMemberId(memberId);
     }
     private Members createMember(MemberRequestDto requestDTO) {
-        ROLE role= ROLE.USER;
-        if(requestDTO.getRole()==ROLE.ADMIN){
-            role=ROLE.ADMIN;
-        }
+        ROLE role = requestDTO.getRole() != null ? requestDTO.getRole() : ROLE.USER;
         return Members.builder()
                 .memberId(requestDTO.getMemberId())
                 .password(passwordEncoder.encode(requestDTO.getPassword()))
