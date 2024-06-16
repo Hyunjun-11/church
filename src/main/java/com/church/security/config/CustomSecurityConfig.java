@@ -31,11 +31,10 @@ public class CustomSecurityConfig {
 
     private static final String[] CORS_URL={
             "http://localhost:5173",
-            "https://tschurch.kr"
+            "https://tschurch.kr",
+            "https://tschurch.kr/api/"
 
     };
-
-
 
     private final JwtAuthFilter jwtAuthFilter;
 
@@ -79,7 +78,7 @@ public class CustomSecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of(CORS_URL));
+        configuration.setAllowedOrigins(List.of("http://localhost:5173", "https://tschurch.kr"));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowCredentials(true);
