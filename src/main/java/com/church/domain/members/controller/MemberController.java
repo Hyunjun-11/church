@@ -2,16 +2,17 @@ package com.church.domain.members.controller;
 
 
 import com.church.domain.members.dto.request.MemberRequestDto;
+import com.church.domain.members.dto.request.SignInRequestDto;
 import com.church.domain.members.dto.response.MemberResponseDto;
 import com.church.domain.members.service.MemberService;
-import com.church.domain.members.dto.request.SignInRequestDto;
+import com.church.security.auth.UserDetailsImpl;
 import com.church.util.message.Message;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -40,6 +41,14 @@ public class MemberController {
         return "테스트다";
     }
 
+    @GetMapping("/test2")
+    public String test3(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        System.out.println("userDetails"+userDetails.getMemberId());
+        System.out.println("userDetails"+userDetails.getMember());
+        System.out.println("userDetails"+userDetails.getAuthorities());
+        return null;
+    }
+
     //회원 단일조회
     @GetMapping("/{id}")
     public ResponseEntity<Message<MemberResponseDto>> findById(@PathVariable Long id) {
@@ -53,9 +62,10 @@ public class MemberController {
     }
     //로그인
     @PostMapping("/signIn")
-    public ResponseEntity<Message<MemberResponseDto>> signIn(@Valid @RequestBody SignInRequestDto requestDto) {
-        return memberService.signIn(requestDto);
+    public ResponseEntity<Message<MemberResponseDto>> signIn(@Valid @RequestBody SignInRequestDto requestDto, HttpServletResponse httpServletResponse) {
+        return memberService.signIn(requestDto,httpServletResponse);
     }
+    //로그아웃
     @DeleteMapping("/logOut")
     public ResponseEntity<Message<String>> logOut() {
         return null;

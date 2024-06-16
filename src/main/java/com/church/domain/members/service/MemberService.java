@@ -6,9 +6,12 @@ import com.church.domain.members.dto.request.SignInRequestDto;
 import com.church.domain.members.dto.response.MemberResponseDto;
 import com.church.domain.members.entity.Members;
 import com.church.domain.members.repository.MemberRepository;
+import com.church.security.jwt.JwtTokenDto;
+import com.church.security.jwt.JwtUtil;
 import com.church.util.message.Message;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -29,6 +32,7 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JwtUtil jwtUtil;
 
 
     //멤버 전체조회
@@ -76,17 +80,17 @@ public class MemberService {
 
     //로그인
     @Transactional
-    public ResponseEntity<Message<MemberResponseDto>> signIn(SignInRequestDto requestDto) {
+    public ResponseEntity<Message<MemberResponseDto>> signIn(SignInRequestDto requestDto, HttpServletResponse httpServletResponse) {
         String memberId = requestDto.getMemberId();
         Optional<Members> optionalMember = findByMemberId(memberId);
 
-        if(optionalMember.isEmpty() || passwordEncoder.matches( requestDto.getPassword(),optionalMember.get().getPassword())) {
+        if(optionalMember.isEmpty() || !passwordEncoder.matches(requestDto.getPassword(),optionalMember.get().getPassword())) {
             throw new UsernameNotFoundException("회원 정보가 일치하지 않습니다.");
         }
         MemberResponseDto memberResponseDto = new MemberResponseDto(optionalMember.get());
 
-        //토큰은 추후에 만들기
-
+        JwtTokenDto tokenDto = jwtUtil.createAllToken(optionalMember.get());
+       jwtUtil.setHeaderToken(httpServletResponse,tokenDto.getAccessToken());
         return new ResponseEntity<>(new Message<>("로그인 성공",memberResponseDto),HttpStatus.OK);
     }
 

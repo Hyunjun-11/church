@@ -63,44 +63,37 @@ public class JwtUtil {
     }
 
     public JwtTokenDto createAllToken(Members members) {
-        return new JwtTokenDto(createToken(members, "Access"), createToken(members, "Refresh"));
+        return new JwtTokenDto(createToken(members));
     }
 
-    public String createToken(Members members, String type) {
+    public String createToken(Members members) {
         Date date = new Date();
-        if(type.equals("Access")) {
+
             return BEARER_PREFIX
                     + Jwts.builder()
                     .setSubject(members.getMemberId())
                     .claim("memberID", members.getMemberId())
                     .claim("email", members.getEmail())
                     .claim("name", members.getName())
+                    .claim("role",members.getRole())
                     .claim("birth", members.getBirth().toString())
                     .signWith(key)
                     .setIssuedAt(date)
                     .setExpiration(new Date(date.getTime() + ACCESS_TIME))
                     .compact();
-        } else {
-            return BEARER_PREFIX
-                    + Jwts.builder()
-                    .setSubject(members.getEmail())
-                    .signWith(key)
-                    .setIssuedAt(date)
-                    .setExpiration(new Date(date.getTime() + REFRESH_TIME))
-                    .compact();
-        }
+
     }
 
-    public String createNewRefreshToken(String email, long time) {
-        Date date = new Date();
-        return BEARER_PREFIX +
-                Jwts.builder()
-                        .setSubject(email)
-                        .setExpiration(new Date(date.getTime() + time))
-                        .setIssuedAt(date)
-                        .signWith(key)
-                        .compact();
-    }
+//    public String createNewRefreshToken(String email, long time) {
+//        Date date = new Date();
+//        return BEARER_PREFIX +
+//                Jwts.builder()
+//                        .setSubject(email)
+//                        .setExpiration(new Date(date.getTime() + time))
+//                        .setIssuedAt(date)
+//                        .signWith(key)
+//                        .compact();
+//    }
 
     public boolean validateToken(String token) {
 
@@ -123,8 +116,8 @@ public class JwtUtil {
         return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody().getSubject();
     }
 
-    public Authentication createAuthentication(String email) {
-        UserDetails userDetails = userDetailsService.loadUserByUsername(email);
+    public Authentication createAuthentication(String memberId) {
+        UserDetails userDetails = userDetailsService.loadUserByUsername(memberId);
         return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
     }
 

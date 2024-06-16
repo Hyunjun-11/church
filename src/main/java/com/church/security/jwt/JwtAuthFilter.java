@@ -27,21 +27,22 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String access_token = jwtUtil.resolveToken(request);
+        System.out.println(access_token);
 
         if (access_token != null) {
             if (jwtUtil.validateToken(access_token)) {
                 setAuthentication(jwtUtil.getMemberInfoFromToken(access_token));
             } else {
-                jwtExceptionHandler(response, "Invalid Refresh Token");
+                jwtExceptionHandler(response, "토큰이 유효하지 않습니다.");
                 return;
             }
         }
         filterChain.doFilter(request, response);
     }
 
-    public void setAuthentication(String email) {
+    public void setAuthentication(String memberId) {
         SecurityContext context = SecurityContextHolder.createEmptyContext();
-        Authentication authentication = jwtUtil.createAuthentication(email);
+        Authentication authentication = jwtUtil.createAuthentication(memberId);
         context.setAuthentication(authentication);
 
         SecurityContextHolder.setContext(context);

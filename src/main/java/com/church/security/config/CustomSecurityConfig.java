@@ -52,7 +52,9 @@ public class CustomSecurityConfig {
 
                 .authorizeHttpRequests(auth->auth
 //                    .requestMatchers(PathRequest.toH2Console()).permitAll()
-                    .requestMatchers("/api/member/signIn").permitAll()
+//                    .requestMatchers("/api/admin/").hasAnyRole("ADMIN")
+//                    .requestMatchers("/api/member/signIn").permitAll()
+
 
                 .anyRequest().permitAll()
         );
