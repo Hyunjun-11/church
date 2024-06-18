@@ -36,6 +36,13 @@ public class CustomSecurityConfig {
 
     };
 
+    private static final String[] PERMITALL_URL={
+            "/api/member/signIn",
+            "/api/banner/*",
+            "api/board/*"
+
+    };
+
     private final JwtAuthFilter jwtAuthFilter;
 
     @Bean
@@ -48,25 +55,20 @@ public class CustomSecurityConfig {
 
 
         http
+                .authorizeHttpRequests(auth->auth.
+                        requestMatchers(PERMITALL_URL).permitAll()
+                        .anyRequest().authenticated()
+                    )
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(AbstractHttpConfigurer::disable)
                 .httpBasic(HttpBasicConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 //세션미사용
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
-                .authorizeHttpRequests(auth->auth
-                        //h2-console
-//                        .requestMatchers(PathRequest.toH2Console()).permitAll()
-//                        .requestMatchers("/api/admin/*").hasAnyRole("ADMIN")
-//                        .requestMatchers("/api/member/signIn").permitAll()
-
-
-                .anyRequest().permitAll()
-        );
 
         //h2-console
 //        http.headers(headers ->headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin));
