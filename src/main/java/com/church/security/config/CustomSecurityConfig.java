@@ -39,7 +39,8 @@ public class CustomSecurityConfig {
     private static final String[] PERMITALL_URL={
             "/api/member/signIn",
             "/api/banner/*",
-            "api/board/*"
+            "/api/board/*",
+            "/api/calendar/*"
 
     };
 
