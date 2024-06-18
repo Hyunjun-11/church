@@ -4,6 +4,7 @@ package com.church.domain.members.controller;
 import com.church.domain.members.dto.request.MemberRequestDto;
 import com.church.domain.members.dto.request.SignInRequestDto;
 import com.church.domain.members.dto.response.MemberResponseDto;
+import com.church.domain.members.dto.response.SignInResponseDto;
 import com.church.domain.members.service.MemberService;
 import com.church.security.auth.UserDetailsImpl;
 import com.church.util.message.Message;
@@ -62,7 +63,7 @@ public class MemberController {
     }
     //로그인
     @PostMapping("/signIn")
-    public ResponseEntity<Message<MemberResponseDto>> signIn(@Valid @RequestBody SignInRequestDto requestDto, HttpServletResponse httpServletResponse) {
+    public ResponseEntity<Message<SignInResponseDto>> signIn(@Valid @RequestBody SignInRequestDto requestDto, HttpServletResponse httpServletResponse) {
         return memberService.signIn(requestDto,httpServletResponse);
     }
     //로그아웃
