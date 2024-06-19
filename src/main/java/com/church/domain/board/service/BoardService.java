@@ -4,6 +4,8 @@ import com.church.domain.board.dto.BoardRequestDto;
 import com.church.domain.board.dto.BoardResponseDto;
 import com.church.domain.board.entity.Board;
 import com.church.domain.board.repository.BoardRepository;
+import com.church.domain.members.entity.Members;
+import com.church.domain.members.repository.MemberRepository;
 import com.church.util.message.Message;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
@@ -12,7 +14,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,6 +22,7 @@ import java.util.List;
 public class BoardService {
 
     private final BoardRepository boardRepository;
+    private final MemberRepository memberRepository;
 
     @Transactional
     public ResponseEntity<Message<List<BoardResponseDto>>> readAll() {
@@ -38,11 +40,12 @@ public class BoardService {
     }
 
     @Transactional
-    public ResponseEntity<Message<BoardResponseDto>> create(BoardRequestDto boardRequestDto) {
+    public ResponseEntity<Message<BoardResponseDto>> create(Members member,BoardRequestDto boardRequestDto) {
         Board board = Board.builder()
                 .title(boardRequestDto.getTitle())
                 .content(boardRequestDto.getContent())
-                .author(boardRequestDto.getAuthor())
+                .author(member.getName())
+                .member(member)
                 .build();
         boardRepository.save(board);
         BoardResponseDto boardResponseDto = new BoardResponseDto(board);
@@ -50,14 +53,23 @@ public class BoardService {
     }
 
     @Transactional
-    public ResponseEntity<Message<BoardResponseDto>> update(Long id, BoardRequestDto boardRequestDto) {
+    public ResponseEntity<Message<BoardResponseDto>> update(Long memberId, Long boardId, BoardRequestDto boardRequestDto) {
 
-        Board board = findById(id);
+        Members member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new EntityNotFoundException("사용자 정보를 찾을 수 없습니다."));
+
+        Board board = findById(boardId);
+        if (!member.getId().equals(board.getMember().getId())) {
+            Message<BoardResponseDto> message = new Message<>("작성자만 수정할 수 있습니다", null);
+            return new ResponseEntity<>(message, HttpStatus.FORBIDDEN);
+        }
+
         board.update(boardRequestDto);
 
         BoardResponseDto boardResponseDto = new BoardResponseDto(board);
         return new ResponseEntity<>(new Message<>("게시글 수정 성공", boardResponseDto), HttpStatus.OK);
     }
+
 
     @Transactional
     public String delete(Long id) {

@@ -1,6 +1,7 @@
 package com.church.domain.board.entity;
 
 import com.church.domain.board.dto.BoardRequestDto;
+import com.church.domain.members.entity.Members;
 import com.church.util.Timestamped;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -23,6 +24,9 @@ public class Board extends Timestamped {
     private String content;
     @Column(nullable = false)
     private String author;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id", nullable = false)
+    private Members member;
 
     public void update(BoardRequestDto requestDto){
         this.title = requestDto.getTitle();

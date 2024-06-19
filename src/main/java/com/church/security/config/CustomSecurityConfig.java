@@ -36,7 +36,7 @@ public class CustomSecurityConfig {
 
     };
 
-    private static final String[] PERMITALL_URL={
+    private static final String[] PERMITTED ={
             "/api/member/signIn",
             "/api/banner/*",
             "/api/board/*",
@@ -57,7 +57,7 @@ public class CustomSecurityConfig {
 
         http
                 .authorizeHttpRequests(auth->auth.
-                        requestMatchers(PERMITALL_URL).permitAll()
+                        requestMatchers(PERMITTED).permitAll()
                         .anyRequest().authenticated()
                     )
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))

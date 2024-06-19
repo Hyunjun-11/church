@@ -1,11 +1,9 @@
 package com.church.domain.board.dto;
 
 import com.church.domain.board.entity.Board;
-import com.church.domain.calendar.dto.CalendarDto;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
@@ -14,6 +12,7 @@ public class BoardResponseDto extends BoardDto{
     private Long boardId;
     private LocalDateTime createAt;
     private LocalDateTime updateAt;
+    private Long memberId;
 
     public BoardResponseDto(Board board) {
         super(
@@ -25,6 +24,7 @@ public class BoardResponseDto extends BoardDto{
         this.boardId = board.getId();
         this.createAt = board.getCreateAt();
         this.updateAt = board.getModifiedDate();
+        this.memberId = board.getMember().getId();
 
     }
 }

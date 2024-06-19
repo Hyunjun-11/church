@@ -1,11 +1,14 @@
 package com.church.domain.members.entity;
 
 
+import com.church.domain.board.entity.Board;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+
+import java.util.List;
 
 @Entity
 @Getter
@@ -37,7 +40,7 @@ public class Members {
     @Column
     private ROLE role;
 
-
-
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Board> boards;
 
 }
