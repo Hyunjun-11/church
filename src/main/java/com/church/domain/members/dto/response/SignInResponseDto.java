@@ -9,10 +9,12 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 public class SignInResponseDto {
+    private Long id;
     private String memberId;
     private String name;
 
     public SignInResponseDto(Members member) {
+        this.id = member.getId();
         this.memberId = member.getMemberId();
         this.name = member.getName();
     }
