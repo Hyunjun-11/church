@@ -2,7 +2,7 @@ package com.church.domain.auth.controller;
 
 
 import com.church.domain.auth.service.AuthService;
-import com.church.domain.members.dto.response.MemberResponseDto;
+import com.church.domain.members.dto.response.SignInResponseDto;
 import com.church.util.message.Message;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +19,7 @@ public class AuthContorller {
     private final AuthService authService;
 
     @GetMapping("/me")
-    public ResponseEntity<Message<MemberResponseDto>> auth(HttpServletRequest request) {
+    public ResponseEntity<Message<SignInResponseDto>> auth(HttpServletRequest request) {
         return authService.auth(request);
 
     }

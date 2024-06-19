@@ -122,13 +122,13 @@ public class MemberService {
         String pureAccessToken = token.getAccessToken().replace("Bearer ", "");
         Cookie accessTokenCookie = new Cookie("ACCESS-TOKEN", pureAccessToken);
         accessTokenCookie.setHttpOnly(true);
-        accessTokenCookie.setSecure(false); // HTTPS를 사용하는 경우 true로 설정
+        accessTokenCookie.setSecure(true); // HTTPS를 사용하는 경우 true로 설정
         accessTokenCookie.setPath("/");
         accessTokenCookie.setMaxAge(3 * 24 * 60 * 60); // 3일
 
         Cookie refreshTokenCookie = new Cookie("REFRESH-TOKEN", pureRefreshToken);
         refreshTokenCookie.setHttpOnly(true);
-        refreshTokenCookie.setSecure(false); // HTTPS를 사용하는 경우 true로 설정
+        refreshTokenCookie.setSecure(true); // HTTPS를 사용하는 경우 true로 설정
         refreshTokenCookie.setPath("/");
         refreshTokenCookie.setMaxAge(3 * 24 * 60 * 60); // 7일
 
