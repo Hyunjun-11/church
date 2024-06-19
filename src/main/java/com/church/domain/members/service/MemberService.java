@@ -142,13 +142,13 @@ public class MemberService {
     public ResponseEntity<Message<String>> signOut(HttpServletRequest request, HttpServletResponse response) {
         Cookie accessTokenCookie = new Cookie("ACCESS-TOKEN", null);
         accessTokenCookie.setHttpOnly(true);
-        accessTokenCookie.setSecure(false); // HTTPS를 사용하는 경우 true로 설정
+        accessTokenCookie.setSecure(true); // HTTPS를 사용하는 경우 true로 설정
         accessTokenCookie.setPath("/");
         accessTokenCookie.setMaxAge(0); // 쿠키 삭제
 
         Cookie refreshTokenCookie = new Cookie("REFRESH-TOKEN", null);
         refreshTokenCookie.setHttpOnly(true);
-        refreshTokenCookie.setSecure(false); // HTTPS를 사용하는 경우 true로 설정
+        refreshTokenCookie.setSecure(true); // HTTPS를 사용하는 경우 true로 설정
         refreshTokenCookie.setPath("/");
         refreshTokenCookie.setMaxAge(0); // 쿠키 삭제
 
