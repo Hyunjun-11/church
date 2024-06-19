@@ -39,7 +39,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         if (access_token != null) {
             if (jwtUtil.validateToken(access_token)) {
                 setAuthentication(jwtUtil.getMemberInfoFromToken(access_token));
-            } else if (refresh_token != null && jwtUtil.existsRefreshToken(jwtUtil.getMemberInfoFromToken(refresh_token))) {
+            } else if (refresh_token != null &&jwtUtil.validateToken(refresh_token)) {
                 String memberId = jwtUtil.getMemberInfoFromToken(refresh_token);
 
                 Members members = membersRepository.findByMemberId(memberId).orElseThrow(
@@ -53,9 +53,17 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 accessTokenCookie.setHttpOnly(true);
                 accessTokenCookie.setSecure(false); // HTTPS를 사용하는 경우 true로 설정
                 accessTokenCookie.setPath("/");
-                accessTokenCookie.setMaxAge(60*60);
-
+                accessTokenCookie.setMaxAge(3 * 24 * 60 * 60); // 3일
                 response.addCookie(accessTokenCookie);
+
+                String newRefreshToken = jwtUtil.createToken(members, "Refresh");
+                String pureNewRefreshToken = newRefreshToken.replace("Bearer ", "").trim();
+                Cookie refreshTokenCookie = new Cookie("REFRESH-TOKEN", pureNewRefreshToken);
+                refreshTokenCookie.setHttpOnly(true);
+                refreshTokenCookie.setSecure(false); // HTTPS를 사용하는 경우 true로 설정
+                refreshTokenCookie.setPath("/");
+                refreshTokenCookie.setMaxAge(3 * 24 * 60 * 60); // 3일
+                response.addCookie(refreshTokenCookie);
 
                 // 새로 발급된 액세스 토큰으로 인증 설정
                 setAuthentication(jwtUtil.getMemberInfoFromToken(pureNewAccessToken));

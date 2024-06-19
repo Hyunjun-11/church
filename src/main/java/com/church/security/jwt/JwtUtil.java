@@ -33,7 +33,7 @@ public class JwtUtil {
     private static final String BEARER_PREFIX = "Bearer ";
     public static final String ACCESS_KEY = "ACCESS-TOKEN";
     public static final String REFRESH_KEY = "REFRESH-TOKEN";
-    private static final long ACCESS_TIME = Duration.ofSeconds(5).toMillis();
+    private static final long ACCESS_TIME = Duration.ofMinutes(60).toMillis();
     private static final long REFRESH_TIME = Duration.ofDays(3).toMillis();
 
     private final TokenService tokenService;
@@ -121,7 +121,6 @@ public class JwtUtil {
     }
 
     public String getMemberInfoFromToken(String token) {
-        System.out.println(token);
         return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody().getSubject();
     }
 
