@@ -8,6 +8,7 @@ import com.church.domain.members.dto.response.SignInResponseDto;
 import com.church.domain.members.service.MemberService;
 import com.church.security.auth.UserDetailsImpl;
 import com.church.util.message.Message;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -67,8 +68,9 @@ public class MemberController {
         return memberService.signIn(requestDto,httpServletResponse);
     }
     //로그아웃
-    @DeleteMapping("/logOut")
-    public ResponseEntity<Message<String>> logOut() {
-        return null;
+    @DeleteMapping("/signOut")
+    public ResponseEntity<Message<String>> signOut(HttpServletRequest request, HttpServletResponse response) {
+        return memberService.signOut(request,response);
     }
+
 }

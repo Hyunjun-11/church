@@ -15,6 +15,7 @@ import com.church.util.message.Message;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -123,7 +124,7 @@ public class MemberService {
         accessTokenCookie.setHttpOnly(true);
         accessTokenCookie.setSecure(false); // HTTPS를 사용하는 경우 true로 설정
         accessTokenCookie.setPath("/");
-        accessTokenCookie.setMaxAge(3 * 24 * 60 * 60); // 30분
+        accessTokenCookie.setMaxAge(3 * 24 * 60 * 60); // 3일
 
         Cookie refreshTokenCookie = new Cookie("REFRESH-TOKEN", pureRefreshToken);
         refreshTokenCookie.setHttpOnly(true);
@@ -135,6 +136,26 @@ public class MemberService {
         httpServletResponse.addCookie(refreshTokenCookie);
 
         return new ResponseEntity<>(new Message<>("로그인 성공", responseDto), HttpStatus.OK);
+    }
+
+    @Transactional
+    public ResponseEntity<Message<String>> signOut(HttpServletRequest request, HttpServletResponse response) {
+        Cookie accessTokenCookie = new Cookie("ACCESS-TOKEN", null);
+        accessTokenCookie.setHttpOnly(true);
+        accessTokenCookie.setSecure(false); // HTTPS를 사용하는 경우 true로 설정
+        accessTokenCookie.setPath("/");
+        accessTokenCookie.setMaxAge(0); // 쿠키 삭제
+
+        Cookie refreshTokenCookie = new Cookie("REFRESH-TOKEN", null);
+        refreshTokenCookie.setHttpOnly(true);
+        refreshTokenCookie.setSecure(false); // HTTPS를 사용하는 경우 true로 설정
+        refreshTokenCookie.setPath("/");
+        refreshTokenCookie.setMaxAge(0); // 쿠키 삭제
+
+        response.addCookie(accessTokenCookie);
+        response.addCookie(refreshTokenCookie);
+
+        return ResponseEntity.ok(new Message<>("로그아웃 성공", null));
     }
 
     private Members findById(Long id){
