@@ -24,6 +24,8 @@ public class Board extends Timestamped {
     private String content;
     @Column(nullable = false)
     private String author;
+    @Column(nullable = false)
+    private Category category;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", nullable = false)
     private Members member;
