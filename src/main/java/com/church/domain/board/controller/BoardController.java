@@ -25,9 +25,16 @@ public class BoardController {
     public ResponseEntity<Message<List<BoardResponseDto>>> readAll() {
         return boardService.readAll();
     }
+    //아이디 상세조회
     @GetMapping("/{id}")
     public ResponseEntity<Message<BoardResponseDto>> readOne(@PathVariable Long id) {
         return boardService.readOne(id);
+    }
+
+    //카테고리별 조회
+    @GetMapping("/category")
+    public ResponseEntity<Message<List<BoardResponseDto>>> readByCategory(@RequestParam String category) {
+        return boardService.readByCategory(category);
     }
     //게시글 등록
     @PostMapping("/")
@@ -35,6 +42,7 @@ public class BoardController {
         System.out.println(userDetails.getMember());
         return boardService.create(userDetails.getMember(),boardRequestDto);
     }
+
     //게시글 수정
     @PutMapping("/{id}")
     public ResponseEntity<Message<BoardResponseDto>> update(@AuthenticationPrincipal UserDetailsImpl userDetails,  @PathVariable Long id, @RequestBody  BoardRequestDto boardRequestDto) {

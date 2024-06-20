@@ -3,6 +3,7 @@ package com.church.domain.board.service;
 import com.church.domain.board.dto.BoardRequestDto;
 import com.church.domain.board.dto.BoardResponseDto;
 import com.church.domain.board.entity.Board;
+import com.church.domain.board.entity.Category;
 import com.church.domain.board.repository.BoardRepository;
 import com.church.domain.members.entity.Members;
 import com.church.domain.members.repository.MemberRepository;
@@ -14,8 +15,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -27,12 +28,27 @@ public class BoardService {
     @Transactional
     public ResponseEntity<Message<List<BoardResponseDto>>> readAll() {
         List<Board> boardList = boardRepository.findAll();
-        List<BoardResponseDto> boards =new ArrayList<>();
-        for (Board board : boardList) {
-            boards.add(new BoardResponseDto(board));
-        }
+        List<BoardResponseDto> boards = boardList.stream()
+                        .map(BoardResponseDto::new)
+                        .collect(Collectors.toList());
         return new ResponseEntity<>(new Message<>("게시글 전체조회 성공",boards), HttpStatus.OK);
     }
+    @Transactional
+    public ResponseEntity<Message<List<BoardResponseDto>>> readByCategory(String category) {
+
+        try {
+        Category categoryEnum = Category.valueOf(category.toUpperCase());
+        List<Board> boardList = boardRepository.findByCategory(categoryEnum);
+        List<BoardResponseDto> boards = boardList.stream()
+                .map(BoardResponseDto::new)
+                .collect(Collectors.toList());
+        return new ResponseEntity<>(new Message<>("게시글 카테고리 조회 성공",boards), HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("Invalid category: " + category, e);
+        }
+
+    }
+    @Transactional
     public ResponseEntity<Message<BoardResponseDto>> readOne(Long id) {
         Board board = findById(id);
         BoardResponseDto boardInfo = new BoardResponseDto(board);
@@ -81,6 +97,7 @@ public class BoardService {
     private Board findById(Long id) {
         return boardRepository.findById(id).orElseThrow(()->new EntityNotFoundException("해당 게시글을 찾을 수 없습니다."));
     }
+
 
 
 }

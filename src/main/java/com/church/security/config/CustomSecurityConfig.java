@@ -38,9 +38,11 @@ public class CustomSecurityConfig {
 
     private static final String[] PERMITTED ={
             "/api/member/signIn",
-            "/api/banner/*",
-            "/api/board/*",
-            "/api/calendar/*"
+            "/api/member/signUp",
+            "/api/member/signOut",
+            "/api/banner/**",
+            "/api/board/**",
+            "/api/calendar/**"
 
     };
 
