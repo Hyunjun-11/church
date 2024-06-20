@@ -19,7 +19,6 @@ public class ImageService {
     @Transactional
     public String upload(MultipartFile imgFile) throws IOException {
         System.out.println("이미지파일 업로드");
-
         return gcsBucketUpload.imageUpload(imgFile);
     }
 
