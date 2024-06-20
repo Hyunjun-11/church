@@ -18,7 +18,8 @@ public class BoardResponseDto extends BoardDto{
         super(
                 board.getTitle(),
                 board.getContent(),
-                board.getAuthor());
+                board.getAuthor(),
+        board.getCategory());
 
 
         this.boardId = board.getId();

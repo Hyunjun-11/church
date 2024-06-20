@@ -60,6 +60,7 @@ public class BoardService {
         Board board = Board.builder()
                 .title(boardRequestDto.getTitle())
                 .content(boardRequestDto.getContent())
+                .category(boardRequestDto.getCategory())
                 .author(member.getName())
                 .member(member)
                 .build();
