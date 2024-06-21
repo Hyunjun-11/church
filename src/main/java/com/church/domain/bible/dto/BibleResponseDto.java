@@ -12,9 +12,9 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class BibleResponseDto {
-    private String book;
-    private String chapter;
-    private String verse;
+    private int book;
+    private int chapter;
+    private int verse;
     private String content;
 
     public BibleResponseDto(Bible bible){
