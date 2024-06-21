@@ -41,6 +41,7 @@ public class CustomSecurityConfig {
             "/api/member/signUp",
             "/api/member/signOut",
             "/api/banner/**",
+            "/api/banner/{categoryName}",
             "/api/board/**",
             "/api/calendar/**"
 
