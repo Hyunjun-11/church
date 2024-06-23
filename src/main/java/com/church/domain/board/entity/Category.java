@@ -7,7 +7,8 @@ public enum Category {
     YOUTH("청년부"),
     WOMEN("여전도회"),
     MEN1("남전도회1"),
-    MEN2("남전도회2");
+    MEN2("남전도회2"),
+    GOWITH("예수님과동행");
 
     private final String name;
 
