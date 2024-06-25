@@ -4,7 +4,7 @@ import com.church.domain.admin.banner.dto.BannerRequestDto;
 import com.church.domain.admin.banner.dto.BannerResponseDto;
 import com.church.domain.admin.banner.entity.Banner;
 import com.church.domain.admin.banner.repository.BannerRepository;
-import com.church.util.Image.service.ImageService;
+import com.church.util.gcs.GcsBucketUpload;
 import com.church.util.message.Message;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
@@ -20,12 +20,12 @@ import java.io.IOException;
 public class BannerService {
 
     private final BannerRepository bannerRepository;
-    private final ImageService imageService;
+    private final GcsBucketUpload gcsBucketUpload;
 
 
     @Transactional
     public ResponseEntity<Message<BannerResponseDto>> readOne(String name) {
-        System.out.println(name);
+//        System.out.println(name);
         Banner banner =findByCategoryName(name);
         BannerResponseDto responseDto=new BannerResponseDto(banner);
         return new ResponseEntity<>(new Message<>("배너조회 성공",responseDto), HttpStatus.OK);
@@ -69,7 +69,7 @@ public class BannerService {
     }
     //이미지 등록
     private String upload(BannerRequestDto bannerDto) throws IOException {
-        return imageService.upload(bannerDto.getImageFile());
+        return gcsBucketUpload.fileUpload(bannerDto.getImageFile());
     }
 
 }
