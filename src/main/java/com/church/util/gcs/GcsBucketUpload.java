@@ -12,6 +12,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -41,6 +42,20 @@ public class GcsBucketUpload {
                 .build();
         storage.create(blobInfo, multipartFile.getInputStream());
         return fileName; // 전체 URL 대신 파일 이름 반환
+    }
+    public String imageUpload(MultipartFile multipartFile) throws IOException {
+        // 서비스 계정 키 파일을 InputStream으로 읽기
+        // Storage 객체 생성
+        Storage storage = getStorage();
+        // 파일 이름 생성
+        String fileName = UUID.randomUUID().toString();
+        // BlobInfo 객체 생성
+        BlobInfo blobInfo = BlobInfo.newBuilder(bucketName, fileName)
+                .setContentType(multipartFile.getContentType())
+                .build();
+        storage.create(blobInfo, multipartFile.getInputStream());
+        return "https://storage.googleapis.com/" +  bucketName + "/" + fileName;
+
     }
 
 

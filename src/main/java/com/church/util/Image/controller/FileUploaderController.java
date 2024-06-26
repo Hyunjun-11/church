@@ -25,6 +25,11 @@ public class FileUploaderController {
     public String fileUpload(@ModelAttribute MultipartFile file) throws IOException {
         return gcsBucketUpload.fileUpload(file);
     }
+    @PostMapping(value = "/image", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE}, produces = MediaType.APPLICATION_JSON_VALUE)
+    public String imageUpload(@ModelAttribute MultipartFile file) throws IOException {
+        return gcsBucketUpload.imageUpload(file);
+    }
+
     @DeleteMapping(value = "/")
     public ResponseEntity<String> deleteFile(@RequestParam String fileUrl) throws IOException {
         String fileName = fileUrl.substring(fileUrl.lastIndexOf("/") + 1);
