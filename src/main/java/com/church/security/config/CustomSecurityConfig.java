@@ -37,6 +37,7 @@ public class CustomSecurityConfig {
     };
 
     private static final String[] PERMITTED ={
+            "/api/auth/me",
             "/api/member/signIn",
             "/api/member/signUp",
             "/api/member/signOut",

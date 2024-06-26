@@ -34,7 +34,6 @@ public class BannerService {
     }
 
     public ResponseEntity<Message<BannerResponseDto>> create(BannerRequestDto bannerDto) throws IOException {
-        System.out.println("배너등록");
         String url = upload(bannerDto);
         Banner banner = Banner.builder()
                 .url(url)

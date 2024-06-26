@@ -3,7 +3,6 @@ package com.church.domain.auth.service;
 import com.church.domain.members.dto.response.SignInResponseDto;
 import com.church.domain.members.entity.Members;
 import com.church.domain.members.repository.MemberRepository;
-import com.church.domain.members.service.MemberService;
 import com.church.security.jwt.JwtUtil;
 import com.church.util.message.Message;
 import jakarta.servlet.http.HttpServletRequest;
@@ -18,9 +17,9 @@ import static com.church.security.jwt.JwtUtil.ACCESS_KEY;
 @RequiredArgsConstructor
 @Service
 public class AuthService {
-    private final MemberService memberService;
     private final JwtUtil jwtUtil;
     private final MemberRepository membersRepository;
+    
     
     
     public ResponseEntity<Message<SignInResponseDto>> auth(HttpServletRequest request) {

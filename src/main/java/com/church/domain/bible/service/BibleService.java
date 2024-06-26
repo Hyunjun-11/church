@@ -23,10 +23,10 @@ public class BibleService {
 
     @Transactional
     public ResponseEntity<Message<List<BibleResponseDto>>> getBibleVerses(BibleRequestDto bibleDto) {
-        System.out.println("bibleDto.getBook()"+bibleDto.getBook());
-        System.out.println("bibleDto.getChapter()"+bibleDto.getChapter());
-        System.out.println("bibleDto.getVerseStart()"+bibleDto.getVerseStart());
-        System.out.println("bibleDto.getVerseEnd()"+bibleDto.getVerseEnd());
+//        System.out.println("bibleDto.getBook()"+bibleDto.getBook());
+//        System.out.println("bibleDto.getChapter()"+bibleDto.getChapter());
+//        System.out.println("bibleDto.getVerseStart()"+bibleDto.getVerseStart());
+//        System.out.println("bibleDto.getVerseEnd()"+bibleDto.getVerseEnd());
 
         List<Bible> bibleList= bibleRepository.findVerses(bibleDto.getBook(),bibleDto.getChapter(),bibleDto.getVerseStart(),bibleDto.getVerseEnd());
         List<Bible> lists=bibleRepository.findVerses(43,3,2,4);

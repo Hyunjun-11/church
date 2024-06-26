@@ -65,8 +65,6 @@ public class MemberService {
     //회원가입
     @Transactional
     public ResponseEntity<Message<MemberResponseDto>> signUp(MemberRequestDto memberRequestDto) {
-        System.out.println("회원가입");
-
 
         String memberId = memberRequestDto.getMemberId();
 

@@ -6,14 +6,12 @@ import com.church.domain.members.dto.request.SignInRequestDto;
 import com.church.domain.members.dto.response.MemberResponseDto;
 import com.church.domain.members.dto.response.SignInResponseDto;
 import com.church.domain.members.service.MemberService;
-import com.church.security.auth.UserDetailsImpl;
 import com.church.util.message.Message;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -33,23 +31,8 @@ public class MemberController {
 //    public ResponseEntity<Message<List<MemberResponseDto>>> readAll() {
 //        return memberService.readAll();
 //    }
-    @GetMapping("/readAAll")
-    public String readAll() {
-        return "전체조회";
-    }
-    @GetMapping("/test")
-    public String test2() {
-        System.out.println("테스트");
-        return "테스트다";
-    }
 
-    @GetMapping("/user")
-    public String test3(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        System.out.println("userDetails"+userDetails.getMemberId());
-        System.out.println("userDetails"+userDetails.getMember());
-        System.out.println("userDetails"+userDetails.getAuthorities());
-        return null;
-    }
+
 
     //회원 단일조회
     @GetMapping("/{id}")
