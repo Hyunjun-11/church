@@ -9,6 +9,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Getter
 @AllArgsConstructor
@@ -29,6 +32,10 @@ public class Board extends Timestamped {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", nullable = false)
     private Members member;
+    @ElementCollection
+    @CollectionTable(name = "board_files", joinColumns = @JoinColumn(name = "board_id"))
+    @Column(name = "file_url")
+    private List<String> files = new ArrayList<>();
 
     public void update(BoardRequestDto requestDto){
         this.title = requestDto.getTitle();

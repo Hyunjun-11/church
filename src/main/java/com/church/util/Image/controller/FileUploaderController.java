@@ -3,6 +3,8 @@ package com.church.util.Image.controller;
 
 import com.church.util.gcs.GcsBucketUpload;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.io.InputStream;
 
 @RestController
 @RequiredArgsConstructor
@@ -31,6 +34,21 @@ public class FileUploaderController {
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("File not found");
         }
+    }
+
+
+    @GetMapping("/generateSignedUrl")
+    public String generateSignedUrl(@RequestParam String fileName) throws IOException {
+        return gcsBucketUpload.generateSignedUrl(fileName);
+    }
+
+    @GetMapping("/downloadFile")
+    public ResponseEntity<InputStreamResource> downloadFile(@RequestParam String fileName) throws IOException {
+        InputStream fileStream = gcsBucketUpload.downloadFile(fileName);
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileName + "\"")
+                .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                .body(new InputStreamResource(fileStream));
     }
 
 

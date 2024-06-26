@@ -39,7 +39,7 @@ public class BoardController {
     //게시글 등록
     @PostMapping("/")
     public ResponseEntity<Message<BoardResponseDto>> create(@AuthenticationPrincipal UserDetailsImpl userDetails,@RequestBody  BoardRequestDto boardRequestDto) {
-        System.out.println(boardRequestDto.toString());
+        System.out.println(boardRequestDto.getFiles());
 
         return boardService.create(userDetails.getMember(),boardRequestDto);
     }

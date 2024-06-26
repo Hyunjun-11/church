@@ -19,7 +19,8 @@ public class BoardResponseDto extends BoardDto{
                 board.getTitle(),
                 board.getContent(),
                 board.getAuthor(),
-        board.getCategory());
+                board.getCategory(),
+                board.getFiles());
 
 
         this.boardId = board.getId();

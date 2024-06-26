@@ -62,6 +62,7 @@ public class BoardService {
                 .content(boardRequestDto.getContent())
                 .category(boardRequestDto.getCategory())
                 .author(member.getName())
+                .files(boardRequestDto.getFiles())
                 .member(member)
                 .build();
         boardRepository.save(board);
