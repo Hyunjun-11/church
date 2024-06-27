@@ -2,6 +2,7 @@ package com.church.domain.members.entity;
 
 
 import com.church.domain.board.entity.Board;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -41,6 +42,7 @@ public class Members {
     private ROLE role;
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private List<Board> boards;
 
 }

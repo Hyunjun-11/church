@@ -4,6 +4,7 @@ import com.church.domain.board.dto.BoardRequestDto;
 import com.church.domain.board.dto.BoardResponseDto;
 import com.church.domain.board.entity.Board;
 import com.church.domain.board.entity.Category;
+import com.church.domain.board.entity.Files;
 import com.church.domain.board.repository.BoardRepository;
 import com.church.domain.members.entity.Members;
 import com.church.domain.members.repository.MemberRepository;
@@ -56,18 +57,22 @@ public class BoardService {
     }
 
     @Transactional
-    public ResponseEntity<Message<BoardResponseDto>> create(Members member,BoardRequestDto boardRequestDto) {
+    public ResponseEntity<Message<BoardResponseDto>> create(Members member, BoardRequestDto boardRequestDto) {
         Board board = Board.builder()
                 .title(boardRequestDto.getTitle())
                 .content(boardRequestDto.getContent())
                 .category(boardRequestDto.getCategory())
                 .author(member.getName())
-                .files(boardRequestDto.getFiles())
                 .member(member)
                 .build();
+
+        List<Files> files = boardRequestDto.getFiles();
+        files.forEach(file -> file.setBoard(board));
+        board.setFiles(files);
+
         boardRepository.save(board);
         BoardResponseDto boardResponseDto = new BoardResponseDto(board);
-        return new ResponseEntity<>(new Message<>("게시글 등록 성공",boardResponseDto),HttpStatus.OK);
+        return new ResponseEntity<>(new Message<>("게시글 등록 성공", boardResponseDto), HttpStatus.OK);
     }
 
     @Transactional
