@@ -77,7 +77,6 @@ public class BoardService {
 
     @Transactional
     public ResponseEntity<Message<BoardResponseDto>> update(Long memberId, Long boardId, BoardRequestDto boardRequestDto) {
-
         Members member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new EntityNotFoundException("사용자 정보를 찾을 수 없습니다."));
 
@@ -87,7 +86,11 @@ public class BoardService {
             return new ResponseEntity<>(message, HttpStatus.FORBIDDEN);
         }
 
-        board.update(boardRequestDto);
+        List<Files> updatedFiles = boardRequestDto.getFiles();
+        updatedFiles.forEach(file -> file.setBoard(board));
+        board.update(boardRequestDto, updatedFiles);
+
+        boardRepository.save(board);
 
         BoardResponseDto boardResponseDto = new BoardResponseDto(board);
         return new ResponseEntity<>(new Message<>("게시글 수정 성공", boardResponseDto), HttpStatus.OK);

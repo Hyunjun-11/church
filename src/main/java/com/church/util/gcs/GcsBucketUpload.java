@@ -34,15 +34,21 @@ public class GcsBucketUpload {
     }
 
 
+
+    //게시글 첨부파일
     public String fileUpload(MultipartFile multipartFile) throws IOException {
         Storage storage = getStorage();
-        String fileName =  multipartFile.getOriginalFilename(); // 파일 이름 생성
+        String uuid = UUID.randomUUID().toString();
+        String folderName = "uploadFile"; // 폴더 이름 지정
+        String fileName = folderName + "/" +uuid+ multipartFile.getOriginalFilename(); // 파일 이름 생성
         BlobInfo blobInfo = BlobInfo.newBuilder(bucketName, fileName)
                 .setContentType(multipartFile.getContentType())
                 .build();
         storage.create(blobInfo, multipartFile.getInputStream());
         return fileName; // 전체 URL 대신 파일 이름 반환
     }
+
+    //게시글 이미지 업로드
     public String imageUpload(MultipartFile multipartFile) throws IOException {
         // 서비스 계정 키 파일을 InputStream으로 읽기
         // Storage 객체 생성
@@ -62,7 +68,9 @@ public class GcsBucketUpload {
 
     public boolean deleteFile(String fileName) throws IOException {
         Storage storage = getStorage();
-        BlobId blobId = BlobId.of(bucketName, fileName);
+        String folderName = "uploadFile";
+        String fileNames = folderName + "/" + fileName;
+        BlobId blobId = BlobId.of(bucketName, fileNames);
         return storage.delete(blobId);
     }
 
