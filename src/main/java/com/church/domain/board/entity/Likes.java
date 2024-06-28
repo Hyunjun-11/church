@@ -1,28 +1,29 @@
 package com.church.domain.board.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@AllArgsConstructor
-@NoArgsConstructor
 @Getter
 @Setter
-public class Files {
+public class Likes {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    @Column(nullable = false)
+    private Long likes = 0L;
 
     @Column(nullable = false)
-    private String fileName;
+    private Long hearts = 0L;
 
     @Column(nullable = false)
-    private Long fileSize;
-
-    @ManyToOne(fetch = FetchType.LAZY)
+    private Long prays = 0L;
+    @OneToOne
     @JoinColumn(name = "board_id", nullable = false)
     private Board board;
+
+
+
 }

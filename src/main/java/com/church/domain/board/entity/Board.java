@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -22,25 +23,58 @@ public class Board extends Timestamped {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Column(nullable = false)
     private String title;
+
     @Column(nullable = false)
     private String content;
+
     @Column(nullable = false)
     private String author;
+
     @Column(nullable = false)
     private Category category;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", nullable = false)
     private Members member;
+
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Files> files;
+    private List<Files> files = new ArrayList<>();
 
+    @OneToOne(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Likes like;
 
-    public void update(BoardRequestDto requestDto){
+    public void update(BoardRequestDto requestDto, List<Files> updatedFiles){
         this.title = requestDto.getTitle();
         this.content = requestDto.getContent();
         this.author = requestDto.getAuthor();
-        this.category=requestDto.getCategory();
+        this.category = requestDto.getCategory();
+        updateFiles(updatedFiles);
+    }
+
+    private void updateFiles(List<Files> updatedFiles) {
+        this.files.clear();
+        for (Files file : updatedFiles) {
+            addFile(file);
+        }
+    }
+
+    public void addFile(Files file) {
+        files.add(file);
+        file.setBoard(this);
+    }
+
+    public void removeFile(Files file) {
+        files.remove(file);
+        file.setBoard(null);
+    }
+
+    public void setLike(Likes like) {
+        this.like = like;
+        if (like != null) {
+            like.setBoard(this);
+        }
     }
 }
