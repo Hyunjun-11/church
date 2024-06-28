@@ -91,17 +91,20 @@ public class BoardService {
     @Transactional
     public ResponseEntity<Message<BoardResponseDto>> update(Long memberId, Long boardId, BoardRequestDto boardRequestDto) {
         Members member = getMembers(memberId);
-
         Board board = findById(boardId);
+
         if (!member.getId().equals(board.getMember().getId())) {
             Message<BoardResponseDto> message = new Message<>("작성자만 수정할 수 있습니다", null);
             return new ResponseEntity<>(message, HttpStatus.FORBIDDEN);
         }
 
-        List<Files> updatedFiles = boardRequestDto.getFiles();
-        updatedFiles.forEach(file -> file.setBoard(board));
-        board.update(boardRequestDto, updatedFiles);
+        List<Files> updatedFiles = null;
+        if (boardRequestDto.getFiles() != null) {
+            updatedFiles = boardRequestDto.getFiles();
+            updatedFiles.forEach(file -> file.setBoard(board));
+        }
 
+        board.update(boardRequestDto, updatedFiles);
         boardRepository.save(board);
 
         BoardResponseDto boardResponseDto = new BoardResponseDto(board);

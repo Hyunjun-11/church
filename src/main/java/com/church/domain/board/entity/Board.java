@@ -51,7 +51,9 @@ public class Board extends Timestamped {
         this.content = requestDto.getContent();
         this.author = requestDto.getAuthor();
         this.category = requestDto.getCategory();
-        updateFiles(updatedFiles);
+        if (updatedFiles != null) {
+            this.files = updatedFiles;
+        }
     }
 
     private void updateFiles(List<Files> updatedFiles) {
