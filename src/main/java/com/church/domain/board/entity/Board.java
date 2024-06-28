@@ -43,6 +43,9 @@ public class Board extends Timestamped {
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Files> files = new ArrayList<>();
 
+    @OneToOne(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Likes like;
+
     public void update(BoardRequestDto requestDto, List<Files> updatedFiles){
         this.title = requestDto.getTitle();
         this.content = requestDto.getContent();
@@ -66,5 +69,12 @@ public class Board extends Timestamped {
     public void removeFile(Files file) {
         files.remove(file);
         file.setBoard(null);
+    }
+
+    public void setLike(Likes like) {
+        this.like = like;
+        if (like != null) {
+            like.setBoard(this);
+        }
     }
 }

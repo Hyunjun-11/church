@@ -3,6 +3,7 @@ package com.church.domain.board.controller;
 
 import com.church.domain.board.dto.BoardRequestDto;
 import com.church.domain.board.dto.BoardResponseDto;
+import com.church.domain.board.dto.LikeDto;
 import com.church.domain.board.service.BoardService;
 import com.church.security.auth.UserDetailsImpl;
 import com.church.util.message.Message;
@@ -51,6 +52,12 @@ public class BoardController {
     @DeleteMapping("/{id}")
     public String delete(@PathVariable Long id) {
         return boardService.delete(id);
+    }
+
+    //좋아요
+    @PostMapping("/{id}/like")
+    public ResponseEntity<String> like(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long id,@RequestBody LikeDto likeDto) {
+        return boardService.like(userDetails,id,likeDto);
     }
 
 }
