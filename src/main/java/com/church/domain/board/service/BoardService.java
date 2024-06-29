@@ -2,32 +2,42 @@ package com.church.domain.board.service;
 
 import com.church.domain.board.dto.BoardRequestDto;
 import com.church.domain.board.dto.BoardResponseDto;
-import com.church.domain.board.dto.LikeDto;
 import com.church.domain.board.entity.Board;
 import com.church.domain.board.entity.Category;
 import com.church.domain.board.entity.Files;
-import com.church.domain.board.entity.Likes;
 import com.church.domain.board.repository.BoardRepository;
+import com.church.domain.likes.dto.LikesDto;
+import com.church.domain.likes.entity.Hearts;
+import com.church.domain.likes.entity.Likes;
+import com.church.domain.likes.entity.Prays;
+import com.church.domain.likes.repository.HeartsRepository;
+import com.church.domain.likes.repository.LikesRepository;
+import com.church.domain.likes.repository.PraysRepository;
 import com.church.domain.members.entity.Members;
 import com.church.domain.members.repository.MemberRepository;
-import com.church.security.auth.UserDetailsImpl;
 import com.church.util.message.Message;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class BoardService {
 
     private final BoardRepository boardRepository;
     private final MemberRepository memberRepository;
+    private final HeartsRepository heartsRepository;
+    private final PraysRepository praysRepository;
+    private final LikesRepository likesRepository;
 
     //게시글 전체조회
     @Transactional
@@ -60,7 +70,13 @@ public class BoardService {
     @Transactional
     public ResponseEntity<Message<BoardResponseDto>> readOne(Long id) {
         Board board = findById(id);
-        BoardResponseDto boardInfo = new BoardResponseDto(board);
+        Long hearts = heartsRepository.countByBoardAndIsLikeTrue(board);
+        Long likes = likesRepository.countByBoardAndIsLikeTrue(board);
+        Long prays = praysRepository.countByBoardAndIsLikeTrue(board);
+        LikesDto likesDto = new LikesDto(likes, hearts, prays);
+        BoardResponseDto boardInfo = new BoardResponseDto(board,likesDto);
+
+
         return new ResponseEntity<>(new Message<>("게시글 단일 조회 성공",boardInfo),HttpStatus.OK);
     }
     
@@ -111,8 +127,6 @@ public class BoardService {
         return new ResponseEntity<>(new Message<>("게시글 수정 성공", boardResponseDto), HttpStatus.OK);
     }
 
-
-
     //게시글삭제
     @Transactional
     public String delete(Long id) {
@@ -121,31 +135,68 @@ public class BoardService {
         return String.format(" ID %d번째 게시글이 삭제되었습니다.", board.getId());
     }
     //좋아요,하트,기도
+    //하트
     @Transactional
-    public ResponseEntity<String> like(UserDetailsImpl userDetails, Long boardId, LikeDto likeDto) {
-        Board board = findById(boardId);
-        Members member = getMembers(userDetails.getMember().getId());
+    public ResponseEntity<String> heart(Long memberId, Long id) {
+        Members member=getMembers(memberId);
+        Board board=findById(id);
+        Optional<Hearts> optionalHearts = heartsRepository.findByBoardAndMember(board, member);
+        Hearts hearts;
 
-        Likes like = board.getLike();
-
-        if (like == null) {
-            like = new Likes();
-            like.setBoard(board);
-            board.setLike(like); // 새로 생성한 like 객체를 board에 설정
+        if(optionalHearts.isEmpty()){
+            hearts = new Hearts();
+            hearts.setBoard(board);
+            hearts.setMember(member);
+            hearts.setIsLike(true);
+        }else{
+            hearts = optionalHearts.get();
+            hearts.setIsLike(!hearts.getIsLike());
         }
 
-        if (likeDto.getLikes() != null) {
-            like.setLikes(like.getLikes() + likeDto.getLikes());
-        }
-        if (likeDto.getHearts() != null) {
-            like.setHearts(like.getHearts() + likeDto.getHearts());
-        }
-        if (likeDto.getPrays() != null) {
-            like.setPrays(like.getPrays() + likeDto.getPrays());
+        heartsRepository.save(hearts);
+        return ResponseEntity.ok("하트");
+    }
+    //기도
+    @Transactional
+    public ResponseEntity<String> prays(Long memberId, Long id) {
+        Members member=getMembers(memberId);
+        Board board=findById(id);
+        Optional<Prays> optionalHearts = praysRepository.findByBoardAndMember(board, member);
+        Prays prays;
+
+        if(optionalHearts.isEmpty()){
+            prays = new Prays();
+            prays.setBoard(board);
+            prays.setMember(member);
+            prays.setIsLike(true);
+        }else{
+            prays = optionalHearts.get();
+            prays.setIsLike(!prays.getIsLike());
         }
 
-        boardRepository.save(board); // 변경된 board 객체를 저장
-        return ResponseEntity.ok("인터랙션이 성공적으로 반영되었습니다.");
+        praysRepository.save(prays);
+        return ResponseEntity.ok("기도");
+    }
+    //좋아요
+    @Transactional
+    public ResponseEntity<String> likes(Long memberId, Long id) {
+        Members member=getMembers(memberId);
+        Board board=findById(id);
+        Optional<Likes> optionalLikes = likesRepository.findByBoardAndMember(board, member);
+        Likes likes;
+
+        if(optionalLikes.isEmpty()){
+            likes = new Likes();
+            likes.setBoard(board);
+            likes.setMember(member);
+            likes.setIsLike(true);
+        }else{
+            likes = optionalLikes.get();
+            likes.setIsLike(!likes.getIsLike());
+        }
+
+        likesRepository.save(likes);
+        return ResponseEntity.ok("좋아요 ");
     }
 
     private Members getMembers(Long memberId) {
@@ -156,4 +207,6 @@ public class BoardService {
     private Board findById(Long id) {
         return boardRepository.findById(id).orElseThrow(()->new EntityNotFoundException("해당 게시글을 찾을 수 없습니다."));
     }
+
+
 }
