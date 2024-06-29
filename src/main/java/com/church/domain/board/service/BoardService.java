@@ -91,11 +91,10 @@ public class BoardService {
                 .member(member)
                 .build();
 
-        if(boardRequestDto.getFiles()!=null){
-
+        if(!boardRequestDto.getFiles().isEmpty()) {
             List<Files> files = boardRequestDto.getFiles();
             files.forEach(file -> file.setBoard(board));
-            board.setFiles(files);
+            board.getFiles().addAll(files);
         }
 
         boardRepository.save(board);
@@ -105,6 +104,7 @@ public class BoardService {
 
     //게시글 수정
     @Transactional
+
     public ResponseEntity<Message<BoardResponseDto>> update(Long memberId, Long boardId, BoardRequestDto boardRequestDto) {
         Members member = getMembers(memberId);
         Board board = findById(boardId);

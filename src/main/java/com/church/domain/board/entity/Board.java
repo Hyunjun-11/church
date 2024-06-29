@@ -43,14 +43,13 @@ public class Board extends Timestamped {
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Files> files = new ArrayList<>();
 
-
     public void update(BoardRequestDto requestDto, List<Files> updatedFiles){
         this.title = requestDto.getTitle();
         this.content = requestDto.getContent();
         this.author = requestDto.getAuthor();
         this.category = requestDto.getCategory();
         if (updatedFiles != null) {
-            this.files = updatedFiles;
+            updateFiles(updatedFiles);
         }
     }
 
@@ -70,6 +69,5 @@ public class Board extends Timestamped {
         files.remove(file);
         file.setBoard(null);
     }
-
 
 }
