@@ -175,4 +175,16 @@ public class MemberService {
 
     }
 
+    public ResponseEntity<String> approve(Members admin, Long id) {
+        Members checkAdmin = findById(admin.getId());
+        Members member = findById(id);
+        if(checkAdmin.getRole()!=ROLE.SUPER){
+            return new ResponseEntity<>("관리자만 회원 정보를 변경할 수 있습니다.",HttpStatus.BAD_REQUEST);
+        }
+        member.setApproval(true);
+        memberRepository.save(member);
+        return new ResponseEntity<>("승인되었습니다.",HttpStatus.OK);
+
+
+    }
 }

@@ -6,12 +6,14 @@ import com.church.domain.members.dto.request.SignInRequestDto;
 import com.church.domain.members.dto.response.MemberResponseDto;
 import com.church.domain.members.dto.response.SignInResponseDto;
 import com.church.domain.members.service.MemberService;
+import com.church.security.auth.UserDetailsImpl;
 import com.church.util.message.Message;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -56,6 +58,12 @@ public class MemberController {
     @DeleteMapping("/signOut")
     public ResponseEntity<Message<String>> signOut(HttpServletRequest request, HttpServletResponse response) {
         return memberService.signOut(request,response);
+    }
+    @PatchMapping("/approval/{id}")
+    public ResponseEntity<String> approve(@AuthenticationPrincipal UserDetailsImpl userDetails,  @PathVariable Long id) {
+        return memberService.approve(userDetails.getMember(), id);
+
+
     }
 
 }

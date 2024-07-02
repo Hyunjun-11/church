@@ -12,6 +12,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class MemberResponseDto {
 
+    private Long id;
     private String memberId;
     private String name;
     private String birth;
@@ -21,6 +22,7 @@ public class MemberResponseDto {
     private Boolean isApproval;
 
     public MemberResponseDto(Members member) {
+        this.id = member.getId();
         this.memberId = member.getMemberId();
         this.name = member.getName();
         this.birth = member.getBirth();

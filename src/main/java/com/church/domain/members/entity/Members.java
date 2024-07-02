@@ -47,4 +47,7 @@ public class Members {
     @JsonIgnore
     private List<Board> boards;
 
+    public void setApproval(boolean approval) {
+        isApproval = approval;
+    }
 }
