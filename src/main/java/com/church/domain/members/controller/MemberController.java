@@ -14,6 +14,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/member")
@@ -27,10 +29,10 @@ public class MemberController {
     }
 
     //회원 전체조회
-//    @GetMapping("/readAll")
-//    public ResponseEntity<Message<List<MemberResponseDto>>> readAll() {
-//        return memberService.readAll();
-//    }
+    @GetMapping("/readAll")
+    public ResponseEntity<Message<List<MemberResponseDto>>> readAll() {
+        return memberService.readAll();
+    }
 
 
 

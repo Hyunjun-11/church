@@ -18,6 +18,7 @@ public class MemberResponseDto {
     private String position;
     private String email;
     private ROLE role;
+    private Boolean isApproval;
 
     public MemberResponseDto(Members member) {
         this.memberId = member.getMemberId();
@@ -26,5 +27,6 @@ public class MemberResponseDto {
         this.position = member.getPosition();
         this.email = member.getEmail();
         this.role = member.getRole();
+        this.isApproval=member.isApproval();
     }
 }

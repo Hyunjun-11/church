@@ -40,6 +40,8 @@ public class Members {
     private String email;
     @Column
     private ROLE role;
+    @Column(nullable = false)
+    private boolean isApproval = false; // 기본값 미승인
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
