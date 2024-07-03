@@ -2,6 +2,7 @@ package com.church.domain.members.entity;
 
 
 import com.church.domain.board.entity.Board;
+import com.church.domain.comment.entity.Comment;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -46,6 +47,9 @@ public class Members {
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private List<Board> boards;
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> comments;
 
     public void setApproval(boolean approval) {
         isApproval = approval;

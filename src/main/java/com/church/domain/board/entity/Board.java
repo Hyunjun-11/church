@@ -1,6 +1,7 @@
 package com.church.domain.board.entity;
 
 import com.church.domain.board.dto.BoardRequestDto;
+import com.church.domain.comment.entity.Comment;
 import com.church.domain.members.entity.Members;
 import com.church.util.Timestamped;
 import jakarta.persistence.*;
@@ -42,6 +43,9 @@ public class Board extends Timestamped {
 
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Files> files = new ArrayList<>();
+
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> comments = new ArrayList<>();
 
     public void update(BoardRequestDto requestDto, List<Files> updatedFiles){
         this.title = requestDto.getTitle();
