@@ -1,6 +1,7 @@
 package com.church.security.auth;
 
 import com.church.domain.members.entity.Members;
+import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -8,6 +9,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.Collections;
 
+@Getter
 public class UserDetailsImpl implements UserDetails {
 
     private final Members member;
@@ -16,14 +18,6 @@ public class UserDetailsImpl implements UserDetails {
     public UserDetailsImpl(Members members, String memberId) {
         this.member = members;
         this.memberId = memberId;
-    }
-
-    public Members getMember() {
-        return member;
-    }
-
-    public String getMemberId() {
-        return this.memberId;
     }
 
     @Override
