@@ -4,6 +4,7 @@ import com.church.domain.board.entity.Board;
 import com.church.domain.likes.dto.LikesDto;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
@@ -12,6 +13,7 @@ import java.util.stream.Collectors;
 
 @Getter
 @Setter
+@ToString
 public class BoardResponseDto extends BoardDto{
     private Long boardId;
     private LocalDateTime createAt;

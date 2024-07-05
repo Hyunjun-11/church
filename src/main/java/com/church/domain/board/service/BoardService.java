@@ -15,6 +15,7 @@ import com.church.domain.likes.repository.LikesRepository;
 import com.church.domain.likes.repository.PraysRepository;
 import com.church.domain.members.entity.Members;
 import com.church.domain.members.repository.MemberRepository;
+import com.church.util.annotation.LogMethodName;
 import com.church.util.message.Message;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
@@ -40,6 +41,7 @@ public class BoardService {
     private final LikesRepository likesRepository;
 
     //게시글 전체조회
+    @LogMethodName
     @Transactional
     public ResponseEntity<Message<List<BoardResponseDto>>> readAll() {
         List<Board> boardList = boardRepository.findAll();
@@ -81,6 +83,7 @@ public class BoardService {
     }
     
     //게시글 생성
+    @LogMethodName
     @Transactional
     public ResponseEntity<Message<BoardResponseDto>> create(Members member, BoardRequestDto boardRequestDto) {
         Board board = Board.builder()
