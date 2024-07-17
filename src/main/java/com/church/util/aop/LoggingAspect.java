@@ -1,11 +1,15 @@
 package com.church.util.aop;
 
 import com.church.domain.board.dto.BoardResponseDto;
+import com.church.domain.members.entity.Members;
 import com.church.util.annotation.LogMethodName;
 import com.church.util.message.Message;
 import lombok.extern.slf4j.Slf4j;
+import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
+import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 @Aspect
@@ -18,15 +22,42 @@ public class LoggingAspect {
         log.info("Return: " + (result != null ? result.toString() : "null"));
     }
 
-    private Long extractMemberIdFromResult(Object result) {
-        // 여기서는 간단한 예로 result 객체에서 memberId를 추출하는 로직을 추가합니다.
-        // 실제로는 result 객체의 타입에 맞게 적절한 필드에서 값을 추출해야 합니다.
-        if (result instanceof Message) {
-            Object data = ((Message<?>) result).getData();
-            if (data instanceof BoardResponseDto) {
-                return ((BoardResponseDto) data).getMemberId();
+    @Around("@annotation(logMethodName)")
+    public Object logReturnValue2(ProceedingJoinPoint joinPoint, LogMethodName logMethodName) throws Throwable {
+        // 메서드 실행 전
+        Object[] args = joinPoint.getArgs();
+        Members member = null;
+
+        for (Object arg : args) {
+            if (arg instanceof Members) {
+                member = (Members) arg;
+                break;
             }
         }
-        return null; // 적절한 기본값 또는 예외 처리 필요
+
+        // 메서드 실행
+        Object result = joinPoint.proceed();
+
+        // 메서드 실행 후
+        if (result instanceof ResponseEntity) {
+            ResponseEntity<?> responseEntity = (ResponseEntity<?>) result;
+            if (responseEntity.getBody() instanceof Message) {
+                Message<?> message = (Message<?>) responseEntity.getBody();
+                if (message.getData() instanceof BoardResponseDto) {
+                    BoardResponseDto boardResponseDto = (BoardResponseDto) message.getData();
+                    Long boardId = boardResponseDto.getBoardId();
+                    String logContent = message.getMessage() + " - Board ID: " + boardId;
+                    Long memberId = member != null ? member.getId() : null;
+
+                    // 로그 저장
+//                    Log logEntity = new Log(logContent, memberId);
+//                    logRepository.save(logEntity);
+
+                    log.info("Return: " + logContent);
+                }
+            }
+        }
+
+        return result;
     }
 }
